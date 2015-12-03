@@ -1,4 +1,4 @@
-var app = angular.module('Providence', ['ngRoute','xeditable']);
+var app = angular.module('Providence', ['ngRoute','xeditable','ui.bootstrap']);
 app.config(function ($routeProvider) {
  
     $routeProvider.when("/history", {

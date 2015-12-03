@@ -242,3 +242,6 @@ body {
 .headerIcons>h4{
 	    margin-top: 7px;
 }
+#addUser,#custom-search-input{
+	margin:10px;
+}
