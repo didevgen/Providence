@@ -1,5 +1,8 @@
 package ua.nure.kovaljov.database.dao.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -77,6 +80,23 @@ public class BaseCRUD implements CRUD{
 			}
 		}
 		return anotherObject;
+	}
+
+	@Override
+	public List<Object> getAllObjects(Class<?> classCriteria) {
+		Session session = null;
+		List<Object> objects = new ArrayList<Object>();
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			objects = session.createCriteria(classCriteria).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
+		}
+		return objects;
 	}
 
 }

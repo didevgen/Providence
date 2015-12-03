@@ -1,5 +1,7 @@
 package ua.nure.kovaljov.services;
 
+import java.util.List;
+
 import ua.nure.kovaljov.database.dao.impl.UserDAOImpl;
 import ua.nure.kovaljov.entity.dbentity.User;
 
@@ -15,5 +17,8 @@ public class UserService {
 	}
 	public User getUser(long userId) {
 		return new UserDAOImpl().getUser(userId, User.class);
+	}
+	public List<User> getUsers() {
+		return new UserDAOImpl().getAllUsers();
 	}
 } 

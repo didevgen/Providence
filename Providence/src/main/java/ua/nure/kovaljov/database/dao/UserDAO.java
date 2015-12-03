@@ -1,5 +1,7 @@
 package ua.nure.kovaljov.database.dao;
 
+import java.util.List;
+
 import ua.nure.kovaljov.entity.dbentity.User;
 
 public interface UserDAO {
@@ -10,4 +12,6 @@ public interface UserDAO {
 	void deleteUser(long objectId, String objectName);
 
 	User updateUser(User user);
+	
+	List<User> getAllUsers();
 }
