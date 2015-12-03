@@ -1,15 +1,35 @@
 package ua.nure.kovaljov.controllers;
 
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import ua.nure.kovaljov.entity.dbentity.User;
+import ua.nure.kovaljov.services.UserService;
 
 @RestController
 public class UserController {
-	@RequestMapping(value = "/user/create", method = RequestMethod.GET)
-	public void registerUser(@PathVariable User user) {
+	private UserService service = new UserService();
+
+	@RequestMapping(value = "/user/create", method = RequestMethod.POST)
+	public User registerUser(@RequestBody User user) {
+		return service.insertUser(user);
+	}
+
+	@RequestMapping(value = "/user/{userId}", method = RequestMethod.POST)
+	public User getUser(@PathVariable long userId) {
+		return service.getUser(userId);
+	}
+
+	@RequestMapping(value = "/user/delete/{userId}", method = RequestMethod.POST)
+	public void deleteUser(@PathVariable long userId) {
+		service.deleteUser(userId);
+	}
+
+	@RequestMapping(value = "/user/update", method = RequestMethod.POST)
+	public User updateUser(@RequestBody User user) {
+		return service.updateUser(user);
 	}
 }
