@@ -1,8 +1,18 @@
-package ua.nure.kovaljov.entity;
+package ua.nure.kovaljov.entity.dbentity;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
+@Entity
+@Table(name = "group")
 public class Group {
 	private long groupId;
 	private String groupName;
@@ -15,18 +25,21 @@ public class Group {
 	public Group() {
 		super();
 	}
+	@Id
+	@GeneratedValue(generator = "increment")
+	@GenericGenerator(name = "increment", strategy = "increment")
+	@Column(name = "group_id")
 	public long getGroupId() {
 		return groupId;
 	}
-	public void setGroupId(long groupId) {
-		this.groupId = groupId;
-	}
+	@Column(name = "group_name")
 	public String getGroupName() {
 		return groupName;
 	}
 	public void setGroupName(String groupName) {
 		this.groupName = groupName;
 	}
+	@ManyToMany(mappedBy = "groups")
 	public List<User> getUsers() {
 		return users;
 	}
