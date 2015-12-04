@@ -24,7 +24,7 @@ public class UserDAOImpl extends BaseCRUD implements UserDAO{
 
 	@Override
 	public void deleteUser(long objectId, String objectName) {
-		super.deleteObject(objectId, objectName);
+		super.deleteObject(objectId, objectName,"user_id");
 	}
 
 	@Override

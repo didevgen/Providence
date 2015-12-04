@@ -47,12 +47,12 @@ public class BaseCRUD implements CRUD{
 	}
 
 	@Override
-	public void deleteObject(long objectId, String objectName) {
+	public void deleteObject(long objectId, String objectName, String whereClause) {
 		Session session = null;
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			session.beginTransaction();
-			Query q = session.createQuery("delete "+objectName+" where class_id = " + objectId);
+			Query q = session.createQuery("delete "+objectName+" where "+whereClause+" = " + objectId);
 			q.executeUpdate();
 			session.getTransaction().commit();
 		} catch (Exception e) {

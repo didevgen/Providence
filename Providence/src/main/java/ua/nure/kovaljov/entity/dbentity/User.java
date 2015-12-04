@@ -13,12 +13,14 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 @Entity
 @Table(name = "USERS")
 public class User {
-	private long id;
-	private String username;
-	private String password;
+	private long userId;
+	private String userName;
+	private long cardNumber;
 	private String email;
 
 	private Set<Group> groups = new HashSet<Group>();
@@ -27,25 +29,20 @@ public class User {
 
 	}
 
-	public User(String username, String password, String email) {
-		this.setUsername(username);
-		this.setPassword(password);
-		this.setEmail(email);
-	}
-
 	public void addGroup(Group group) {
 		this.groups.add(group);
 	}
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(generator = "increment")
+	@GenericGenerator(name = "increment", strategy = "increment")
 	@Column(name = "USER_ID")
-	public long getId() {
-		return id;
+	public long getUserId() {
+		return userId;
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	public void setUserId(long id) {
+		this.userId = id;
 	}
 
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -61,21 +58,21 @@ public class User {
 	}
 
 	@Column(name = "username")
-	public String getUsername() {
-		return username;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setUserName(String username) {
+		this.userName = username;
 	}
 
-	@Column(name = "password")
-	public String getPassword() {
-		return password;
+	@Column(name = "cardNumber")
+	public long getCardNumber() {
+		return cardNumber;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setCardNumber(long cardNumber) {
+		this.cardNumber = cardNumber;
 	}
 
 	@Column(name = "email")

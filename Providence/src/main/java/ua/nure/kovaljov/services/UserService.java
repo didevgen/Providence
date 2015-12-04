@@ -10,10 +10,11 @@ public class UserService {
 		return new UserDAOImpl().insertUser(user);
 	}
 	public User updateUser(User user) {
+		user.getGroups().forEach(item->item.setUsers(null));
 		return new UserDAOImpl().updateUser(user);
 	}
 	public void deleteUser(long userId) {
-		new UserDAOImpl().deleteObject(userId, "User");
+		new UserDAOImpl().deleteUser(userId, "User");
 	}
 	public User getUser(long userId) {
 		return new UserDAOImpl().getUser(userId, User.class);

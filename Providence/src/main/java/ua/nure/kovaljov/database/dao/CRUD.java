@@ -7,7 +7,7 @@ public interface CRUD {
 
 	Object insertObject(Object obj);
 
-	void deleteObject(long objectId, String objectName);
+	void deleteObject(long objectId, String objectName,String whereClause);
 
 	Object updateObject(Object anotherObject);
 	
