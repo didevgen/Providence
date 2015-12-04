@@ -33,6 +33,7 @@ app.controller('userViewController', function($scope, $filter, $http) {
 		angular.extend(data, {
 			id : id
 		});
+		sendRequest("/kovaljov/user/all",{});
 	};
 	$scope.checkEmail = function(data) {
 		if (data == null || data.indexOf('@') < 0) {
@@ -75,5 +76,17 @@ app.controller('userViewController', function($scope, $filter, $http) {
 			});
 		}
 		return result;
+	}
+	
+	
+	function sendRequest(urlpattern,dataObj) {
+		$http({
+			  method: 'POST',
+			  url: urlpattern,
+			  data: dataObj,
+			  headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			}).then(function successCallback(response) {
+			  }, function errorCallback(response) {
+			  });
 	}
 });

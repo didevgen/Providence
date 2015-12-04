@@ -1,80 +1,67 @@
 package ua.nure.kovaljov.entity.dbentity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.GenericGenerator;
 @Entity
-@Table(name = "group")
+@Table(name = "GROUPS")
 public class Group {
-	private long groupId;
-	private String groupName;
-	private List<User> users = new ArrayList<User>();
-	public Group(long groupId, String groupName) {
-		super();
-		this.groupId = groupId;
-		this.groupName = groupName;
-	}
+	private long id;
+	private String name;
+
+	private Set<User> users = new HashSet<User>();
+
 	public Group() {
-		super();
+
 	}
+
+	public Group(String name) {
+		this.setName(name);
+	}
+
 	@Id
-	@GeneratedValue(generator = "increment")
-	@GenericGenerator(name = "increment", strategy = "increment")
-	@Column(name = "group_id")
-	public long getGroupId() {
-		return groupId;
+	@GeneratedValue
+	@Column(name = "GROUP_ID")
+	public long getId() {
+		return id;
 	}
-	@Column(name = "group_name")
-	public String getGroupName() {
-		return groupName;
+
+	public void setId(long id) {
+		this.id = id;
 	}
-	public void setGroupName(String groupName) {
-		this.groupName = groupName;
+
+	public void addUser(User user) {
+		this.users.add(user);
 	}
-	@ManyToMany(mappedBy = "groups")
-	public List<User> getUsers() {
+
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "groups")
+	public Set<User> getUsers() {
 		return users;
 	}
-	public void setUsers(List<User> users) {
+
+	public void setUsers(Set<User> users) {
 		this.users = users;
 	}
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (groupId ^ (groupId >>> 32));
-		result = prime * result + ((groupName == null) ? 0 : groupName.hashCode());
-		return result;
+
+	@Column(name = "name")
+	public String getName() {
+		return name;
 	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Group other = (Group) obj;
-		if (groupId != other.groupId)
-			return false;
-		if (groupName == null) {
-			if (other.groupName != null)
-				return false;
-		} else if (!groupName.equals(other.groupName))
-			return false;
-		return true;
+
+	public void setName(String name) {
+		this.name = name;
 	}
-	@Override
-	public String toString() {
-		return "Group [groupName=" + groupName + "]";
-	}
-	
+
+	// other getters and setters...
 }

@@ -17,7 +17,7 @@ public class BaseCRUD implements CRUD{
 		Object clazz = new Object();
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
-			clazz = session.get(clazzName, objectId);
+			clazz = session.load(clazzName, objectId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

@@ -3,8 +3,12 @@ package ua.nure.kovaljov.database.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Hibernate;
+import org.hibernate.Session;
+
 import ua.nure.kovaljov.database.dao.UserDAO;
 import ua.nure.kovaljov.entity.dbentity.User;
+import ua.nure.kovaljov.utils.HibernateUtil;
 
 public class UserDAOImpl extends BaseCRUD implements UserDAO{
 
@@ -30,12 +34,23 @@ public class UserDAOImpl extends BaseCRUD implements UserDAO{
 
 	@Override
 	public List<User> getAllUsers() {
-		List<Object> objects = super.getAllObjects(User.class);
-		List<User> result = new ArrayList<>();
-		for (Object obj : objects) {
-			result.add((User)obj);
+		Session session = null;
+		List<User> objects = new ArrayList<User>();
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			objects = session.createCriteria(User.class).list();
+			for(User o : objects) {
+				Hibernate.initialize(o.getGroups());
+				o.getGroups().forEach(item->item.setUsers(null));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
 		}
-		return result;
+		return objects;
 	}
 
 }

@@ -1,6 +1,6 @@
 var app = angular.module('Providence', ['ngRoute','xeditable','ui.bootstrap']);
-app.config(function ($routeProvider) {
- 
+app.config(function ($routeProvider,$httpProvider) {
+	$httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
     $routeProvider.when("/history", {
         controller: "userHistory",
         templateUrl: "../templates/history.html"
