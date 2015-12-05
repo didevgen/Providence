@@ -15,7 +15,22 @@ public class GroupDAOImpl extends BaseCRUD implements GroupDAO{
 
 	@Override
 	public Group getGroup(long objectId, Class<Group> className) {
-		return (Group)super.getObject(objectId, Group.class);
+		Session session = null;
+		Group group = new Group();
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			group = session.get(Group.class, objectId);
+			for (User user : group.getUsers()) {
+				Hibernate.initialize(user);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
+		}
+		return group;
 	}
 
 	@Override

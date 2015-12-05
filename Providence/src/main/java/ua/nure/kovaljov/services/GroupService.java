@@ -16,7 +16,11 @@ public class GroupService {
 		new GroupDAOImpl().deleteGroup(GroupId, "Group");
 	}
 	public Group getGroup(long GroupId) {
-		return new GroupDAOImpl().getGroup(GroupId, Group.class);
+		Group group = new GroupDAOImpl().getGroup(GroupId, Group.class);
+		if (group!=null) {
+			group.getUsers().forEach(item->item.setGroups(null));
+		}
+		return group;
 	}
 	public List<Group> getGroups() {
 		return new GroupDAOImpl().getAllGroups();

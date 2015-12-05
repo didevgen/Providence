@@ -9,7 +9,11 @@ app.config(function ($routeProvider,$httpProvider) {
         controller: "userController",
         templateUrl: "../templates/users.html"
     });
-    $routeProvider.otherwise({redirectTo:"/history"})
+    $routeProvider.when("/groups/:group", {
+        controller: "groupDetailController",
+        templateUrl: "../templates/groups.html"
+    });
+    //$routeProvider.otherwise({redirectTo:"/history"})
 });
 
 app.run(function(editableOptions) {
