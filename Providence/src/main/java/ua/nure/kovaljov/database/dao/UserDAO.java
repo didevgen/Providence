@@ -14,4 +14,6 @@ public interface UserDAO {
 	User updateUser(User user);
 	
 	List<User> getAllUsers();
+	
+	List<User> userWithoutGroup();
 }

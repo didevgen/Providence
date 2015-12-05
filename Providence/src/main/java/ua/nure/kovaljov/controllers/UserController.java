@@ -44,4 +44,16 @@ public class UserController {
 		System.out.println("getAllUsers");
 		return service.getUsers();
 	}
+	
+	@RequestMapping(value = "/user/group/{groupId}", method = RequestMethod.POST)
+	public List<User> getUsersNotRelatedToGroup(@PathVariable long groupId) {
+		System.out.println("getUsersNotRelatedToGroup");
+		return service.getUsersWithoutGroup(groupId);
+	}
+	
+	@RequestMapping(value = "/user/{userId}/group/{groupId}", method = RequestMethod.POST)
+	public void removeGroupFromUser(@PathVariable long userId,@PathVariable long groupId) {
+		System.out.println("removeGroupFromUser");
+		service.removeGroupFromUser(groupId, userId);
+	}
 }

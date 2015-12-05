@@ -53,4 +53,9 @@ public class UserDAOImpl extends BaseCRUD implements UserDAO{
 		return objects;
 	}
 
+	@Override
+	public List<User> userWithoutGroup() {
+		return getAllUsers();
+	}
+
 }
