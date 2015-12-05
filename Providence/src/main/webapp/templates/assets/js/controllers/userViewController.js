@@ -6,6 +6,10 @@ app.controller('userViewController', function ($scope, $filter, $http) {
     $scope.searchText = "";
     getAllUsers();
     $scope.removeUser = function (index, userId) {
+    	if (userId == undefined) {
+    		$scope.users.shift();
+    		return;
+    	}
         var myFunc = function (data) {
             getAllUsers();
         }
