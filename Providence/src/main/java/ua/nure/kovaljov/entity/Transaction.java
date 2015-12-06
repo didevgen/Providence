@@ -13,14 +13,14 @@ public class Transaction {
 
 	private int inOutState;
 
-	private long time;
+	private String timeString;
 	
 	public Transaction() {
 		super();
 	}
 
 	public Transaction(long cardId, int pin, int verified, 
-			int doorId, int eventType, int inOutState, long time) {
+			int doorId, int eventType, int inOutState, String time) {
 		super();
 		this.cardId = cardId;
 		this.pin = pin;
@@ -28,7 +28,7 @@ public class Transaction {
 		this.doorId = doorId;
 		this.eventType = eventType;
 		this.inOutState = inOutState;
-		this.time = time;
+		this.timeString = time;
 	}
 
 	public long getCardId() {
@@ -79,18 +79,18 @@ public class Transaction {
 		this.inOutState = inOutState;
 	}
 
-	public long getTime() {
-		return time;
+	public String getTime() {
+		return timeString;
 	}
 
-	public void setTime(long time) {
-		this.time = time;
+	public void setTime(String time) {
+		this.timeString = time;
 	}
 
 	@Override
 	public String toString() {
 		return "Transaction [cardId=" + cardId + ", pin=" + pin + ", verified=" + verified + ", doorId=" + doorId
-				+ ", eventType=" + eventType + ", inOutState=" + inOutState + ", time=" + time + "]";
+				+ ", eventType=" + eventType + ", inOutState=" + inOutState + ", time=" + timeString + "]";
 	}
 
 	@Override
@@ -98,7 +98,6 @@ public class Transaction {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (int) (cardId ^ (cardId >>> 32));
-		result = prime * result + (int) (time ^ (time >>> 32));
 		return result;
 	}
 
@@ -113,7 +112,7 @@ public class Transaction {
 		Transaction other = (Transaction) obj;
 		if (cardId != other.cardId)
 			return false;
-		if (time != other.time)
+		if (timeString != other.timeString)
 			return false;
 		return true;
 	}

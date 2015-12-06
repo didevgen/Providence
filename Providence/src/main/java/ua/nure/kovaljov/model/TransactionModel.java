@@ -1,5 +1,7 @@
 package ua.nure.kovaljov.model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,7 +14,7 @@ public class TransactionModel {
 
 	private long cardId;
 
-	private String verified;
+	private int verifiedId;
 
 	private int doorId;
 
@@ -20,28 +22,24 @@ public class TransactionModel {
 
 	private Date time;
 	
-	private String event;
+	private int eventId;
+	
 
 	public TransactionModel() {
 	}
 
-	public TransactionModel(long cardId, String verified, int doorId, String eventType, int inOutState, Date time) {
-		super();
-		this.cardId = cardId;
-		this.verified = verified;
-		this.doorId = doorId;
-		this.inOutState = inOutState;
-		this.time = time;
-		this.event = eventType;
-	}
-
-	public TransactionModel(long cardId, int verifCode, int doorId, int eventId, int inOutState, long time) {
+	public TransactionModel(long cardId, int verifCode, int doorId, int eventId, int inOutState, String time) {
 		this.cardId = cardId;
 		this.doorId = doorId;
-		this.verified = verifModeToCode.get(verifCode);
+		this.verifiedId = verifCode;
 		this.inOutState = inOutState;
-		this.time = new Date(time);
-		this.event = eventTypeMap.get(eventId);
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
+		try {
+			this.time = sdf.parse(time);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		this.eventId = eventId;
 	}
 
 	private static final Map<Integer, String> verifModeToCode = new HashMap<Integer, String>();
@@ -90,12 +88,21 @@ public class TransactionModel {
 		this.cardId = cardId;
 	}
 
-	public String getVerified() {
-		return verified;
+
+	public int getVerifiedId() {
+		return verifiedId;
 	}
 
-	public void setVerified(String verified) {
-		this.verified = verified;
+	public void setVerifiedId(int verifiedId) {
+		this.verifiedId = verifiedId;
+	}
+
+	public int getEventId() {
+		return eventId;
+	}
+
+	public void setEventId(int eventId) {
+		this.eventId = eventId;
 	}
 
 	public int getDoorId() {
@@ -122,13 +129,6 @@ public class TransactionModel {
 		this.time = time;
 	}
 
-	public String getEvent() {
-		return event;
-	}
-
-	public void setEvent(String event) {
-		this.event = event;
-	}
 
 	public static List<TransactionModel> getModelFromTransaction(Transaction[] transaction) {
 		List<TransactionModel> model = new ArrayList<TransactionModel>();
@@ -139,6 +139,11 @@ public class TransactionModel {
 					tr.getTime()));
 		}
 		return model;
+	}
+
+	@Override
+	public String toString() {
+		return "TransactionModel [cardId=" + cardId + ", time=" + time + "]";
 	}
 
 }
