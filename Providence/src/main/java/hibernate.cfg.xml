@@ -28,5 +28,8 @@
 		</property>
 		<mapping class="ua.nure.kovaljov.entity.dbentity.User" />
 		<mapping class="ua.nure.kovaljov.entity.dbentity.Group" />
+		<mapping class="ua.nure.kovaljov.entity.dbentity.History" />
+		<mapping class="ua.nure.kovaljov.entity.dbentity.EventType" />
+		<mapping class="ua.nure.kovaljov.entity.dbentity.VerifyMode" />
 	</session-factory>
 </hibernate-configuration>

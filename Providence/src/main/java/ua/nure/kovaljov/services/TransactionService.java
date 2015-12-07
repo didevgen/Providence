@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import ua.nure.kovaljov.database.dao.impl.TransactionDAOImpl;
+import ua.nure.kovaljov.entity.dbentity.History;
 import ua.nure.kovaljov.model.TransactionModel;
 
 public class TransactionService {
@@ -13,5 +14,9 @@ public class TransactionService {
 	
 	public void insertTransactionModels(List<TransactionModel> models) {
 		new TransactionDAOImpl().insertTransactions(models);
+	}
+	
+	public List<History> getAllHistory() {
+		return new TransactionDAOImpl().getAllHistory();
 	}
 }

@@ -40,6 +40,9 @@ public class GroupDAOImpl extends BaseCRUD implements GroupDAO{
 
 	@Override
 	public void deleteGroup(long objectId, String objectName) {
+		if (objectId ==1) {
+			return;
+		}
 		super.deleteObject(objectId, "Group", "group_id");
 	}
 

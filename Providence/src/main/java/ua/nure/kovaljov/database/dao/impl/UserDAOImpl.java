@@ -7,6 +7,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.Session;
 
 import ua.nure.kovaljov.database.dao.UserDAO;
+import ua.nure.kovaljov.entity.dbentity.Group;
 import ua.nure.kovaljov.entity.dbentity.User;
 import ua.nure.kovaljov.utils.HibernateUtil;
 
@@ -14,7 +15,22 @@ public class UserDAOImpl extends BaseCRUD implements UserDAO{
 
 	@Override
 	public User getUser(long objectId, Class<User> className) {
-		return (User) super.getObject(objectId, className);
+		Session session = null;
+		User user = new User();
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			user = session.get(User.class, objectId);
+			for (Group group : user.getGroups()) {
+				Hibernate.initialize(group);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
+		}
+		return user;
 	}
 
 	@Override

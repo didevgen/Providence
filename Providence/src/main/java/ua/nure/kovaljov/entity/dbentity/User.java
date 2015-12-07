@@ -84,4 +84,11 @@ public class User {
 		this.email = email;
 	}
 
+	@Override
+	public String toString() {
+		return "User [userName=" + userName + ", cardNumber=" + cardNumber + "]";
+	}
+	
+	
+
 }
