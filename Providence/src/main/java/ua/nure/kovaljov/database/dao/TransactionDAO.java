@@ -8,7 +8,12 @@ import ua.nure.kovaljov.model.TransactionModel;
 
 public interface TransactionDAO {
 	Date getLatestDate();
-	void insertTransactions(List<TransactionModel> transactions);
-	List<History> getAllHistory();
-}
 
+	void insertTransactions(List<TransactionModel> transactions);
+
+	List<History> getAllHistory();
+	
+	List<History> getMonthHistory();
+	
+	List<History> getHistoryByCardNumber(long cardNumber);
+}

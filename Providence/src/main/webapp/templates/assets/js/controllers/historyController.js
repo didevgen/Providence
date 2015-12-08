@@ -1,5 +1,5 @@
 app.controller('userHistory', function ($scope) {
-	$scope.message = 'Everyone come and see how good I look!';
+	$scope.message = 'This mode is for real-time looking for activity';
 	
 	var ws = new WebSocket("ws://localhost:8080/kovaljov/websocket");
 	
@@ -11,6 +11,14 @@ app.controller('userHistory', function ($scope) {
         listener(JSON.parse(message.data));
     };
     $scope.names = []; 
+    $scope.getLastTenItems = function(){
+    	if ($scope.names.length<=10){
+    		return $scope.names;
+    	}
+    	else{
+    		return $scope.names.slice(0,10);
+    	}
+    }
     function listener(data) {
         var messageObj = data;
         console.log("Received data from websocket: ", messageObj);

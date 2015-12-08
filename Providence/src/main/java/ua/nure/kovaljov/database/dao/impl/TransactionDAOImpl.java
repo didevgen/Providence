@@ -1,6 +1,7 @@
 package ua.nure.kovaljov.database.dao.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -9,9 +10,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
-import ua.nure.kovaljov.database.dao.GroupDAO;
 import ua.nure.kovaljov.database.dao.TransactionDAO;
-import ua.nure.kovaljov.entity.dbentity.Group;
 import ua.nure.kovaljov.entity.dbentity.History;
 import ua.nure.kovaljov.entity.dbentity.User;
 import ua.nure.kovaljov.model.TransactionModel;
@@ -68,7 +67,7 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 			}
 		}
 	}
-	
+
 	private User insertUnregisteredUser(long cardId) {
 		User user = new User();
 		user.setCardNumber(cardId);
@@ -77,6 +76,7 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 		user = new UserDAOImpl().insertUser(user);
 		return user;
 	}
+
 	private User getUserByCard(long cardId) {
 		Session session = null;
 		User user = null;
@@ -84,11 +84,11 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Criteria cr = session.createCriteria(User.class);
 			cr.add(Restrictions.eq("cardNumber", cardId));
+			@SuppressWarnings("unchecked")
 			List<User> lst = cr.list();
-			if (lst.size()==0) {
+			if (lst.size() == 0) {
 				return insertUnregisteredUser(cardId);
-			}
-			else {
+			} else {
 				return lst.get(0);
 			}
 		} catch (Exception e) {
@@ -100,14 +100,16 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 		}
 		return user;
 	}
+
 	private User getUserByCard(List<User> users, long cardId) {
-		for(User user : users) {
-			if (user.getCardNumber()==cardId) {
+		for (User user : users) {
+			if (user.getCardNumber() == cardId) {
 				return user;
 			}
 		}
 		return null;
 	}
+
 	@Override
 	public List<History> getAllHistory() {
 		List<User> cardNumbers = new ArrayList<>();
@@ -115,11 +117,79 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 		List<Object> objects = super.getAllObjects(History.class);
 		for (Object o : objects) {
 			History h = (History) o;
-			if (h.getCardId()==0) {
+			if (h.getCardId() == 0) {
 				continue;
 			}
 			User user = getUserByCard(cardNumbers, h.getCardId());
-			if (user==null) {
+			if (user == null) {
+				user = getUserByCard(h.getCardId());
+				cardNumbers.add(user);
+			}
+			user.setGroups(null);
+			h.setUser(user);
+			history.add(h);
+		}
+		return history;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<History> getMonthHistory() {
+		Calendar c = Calendar.getInstance();
+		c.setTime(new Date());
+		c.add(Calendar.MONTH, -1);
+		Session session = null;
+		List<User> cardNumbers = new ArrayList<>();
+		List<History> history = new ArrayList<History>();
+		List<History> objects = new ArrayList<History>();
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			objects = session.createCriteria(History.class).add(Restrictions.ge("time", c.getTime())).add(Restrictions.ne("cardId", 0L)).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
+		}
+		for (History h : objects) {
+			if (h.getCardId() == 0) {
+				continue;
+			}
+			User user = getUserByCard(cardNumbers, h.getCardId());
+			if (user == null) {
+				user = getUserByCard(h.getCardId());
+				cardNumbers.add(user);
+			}
+			user.setGroups(null);
+			h.setUser(user);
+			history.add(h);
+		}
+		return history;
+	}
+
+	@Override
+	public List<History> getHistoryByCardNumber(long cardNumber) {
+		Session session = null;
+		List<User> cardNumbers = new ArrayList<>();
+		List<History> history = new ArrayList<History>();
+		List<History> objects = new ArrayList<History>();
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			objects = session.createCriteria(History.class).add(Restrictions.eq("cardId", cardNumber)).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
+		}
+		for (History h : objects) {
+			if (h.getCardId() == 0) {
+				continue;
+			}
+			User user = getUserByCard(cardNumbers, h.getCardId());
+			if (user == null) {
 				user = getUserByCard(h.getCardId());
 				cardNumbers.add(user);
 			}

@@ -1,33 +1,41 @@
+
 <div class="col-md-12">
-						<!--    Context Classes  -->
-						<div class="panel panel-default">
+<div class="row">
+			<div class="col-lg-12">
+				<a ng-href="#/transactions"><div class="btn btn-sq btn-primary col-md-6" >
+					<i class="fa fa-calendar fa-2x"></i><br /> Transactions during last month
+				</div></a>
+			</div>
+		</div>
+	<!--    Context Classes  -->
+	<div class="panel panel-default">
 
-							<div class="panel-heading">{{message}}</div>
-
-							<div class="panel-body">
-								<div class="table-responsive">
-									<table class="table">
-										<thead>
-											<tr>
-												<th>Card Number</th>
-												<th>Time</th>
-												<th>Event</th>
-												<th>Door</th>
-												<th>Verified</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr class="success" ng-repeat="x in names">
-												<td>{{ x.cardId }}</td>
-												<td>{{ x.time }}</td>
-												<td>{{ x.event }}</td>
-												<td>{{ x.doorId }}</td>
-												<td>{{ x.verified }}</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-							</div>
-						</div>
-						<!--  end  Context Classes  -->
-					</div>
+		<div class="panel-heading">{{message}}</div>
+		
+		<div class="panel-body">
+			<div class="table-responsive">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Card Number</th>
+							<th>Time</th>
+							<th>Event</th>
+							<th>Door</th>
+							<th>Verified</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="success" ng-repeat="x in names">
+							<td>{{ x.cardId }}</td>
+							<td>{{ x.time }}</td>
+							<td>{{ x.event }}</td>
+							<td>{{ x.doorId }}</td>
+							<td>{{ x.verified }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<!--  end  Context Classes  -->
+</div>

@@ -19,4 +19,12 @@ public class TransactionService {
 	public List<History> getAllHistory() {
 		return new TransactionDAOImpl().getAllHistory();
 	}
+	
+	public List<History> getLastMonthHistory() {
+		return new TransactionDAOImpl().getMonthHistory();
+	}
+	
+	public List<History> getUserHistory(long cardNumber){
+		return new TransactionDAOImpl().getHistoryByCardNumber(cardNumber);
+	}
 }

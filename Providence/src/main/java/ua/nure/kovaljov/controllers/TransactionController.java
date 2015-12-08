@@ -3,6 +3,7 @@ package ua.nure.kovaljov.controllers;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,10 +23,21 @@ public class TransactionController {
 		return date.toString();
 	}
 	
-	@RequestMapping(value = "/transaction/get/all", method = RequestMethod.GET)
+	@RequestMapping(value = "/transaction/get/all", method = RequestMethod.POST)
 	public List<History> getAllHistory() {
-		System.out.println("here");
 		List<History> history = new TransactionService().getAllHistory();
+		return history;
+	}
+	
+	@RequestMapping(value = "/transaction/get/month", method = RequestMethod.POST)
+	public List<History> getMonthHistory() {
+		List<History> history = new TransactionService().getLastMonthHistory();
+		return history;
+	}
+	
+	@RequestMapping(value = "/transaction/get/{cardNumber}", method = RequestMethod.POST)
+	public List<History> getUserHistory(@PathVariable long cardNumber) {
+		List<History> history = new TransactionService().getUserHistory(cardNumber);
 		return history;
 	}
 }

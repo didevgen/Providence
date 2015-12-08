@@ -13,7 +13,15 @@ app.config(function ($routeProvider,$httpProvider) {
         controller: "groupDetailController",
         templateUrl: "../templates/groups.html"
     });
-    //$routeProvider.otherwise({redirectTo:"/history"})
+    $routeProvider.when("/transactions", {
+        controller: "transactionController",
+        templateUrl: "../templates/transaction.html"
+    });
+    $routeProvider.when("/userHistory/:cardNumber", {
+        controller: "userHistoryController",
+        templateUrl: "../templates/userHistory.html"
+    });
+    $routeProvider.otherwise({redirectTo: '/history'});
 });
 
 app.run(function(editableOptions) {

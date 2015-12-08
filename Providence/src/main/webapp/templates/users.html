@@ -66,6 +66,7 @@
 											Cancel</button>
 									</form>
 									<div class="buttons" ng-show="!rowform.$visible">
+									<a ng-href="#/userHistory/{{user.cardNumber}}"><button class="btn btn-success">User history</button></a>
 										<button class="btn btn-primary" ng-click="rowform.$show()">Edit</button>
 										<button class="btn btn-danger"
 											ng-click="removeUser($index,user.userId)">Delete</button>

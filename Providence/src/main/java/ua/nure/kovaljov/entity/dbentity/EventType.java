@@ -16,7 +16,7 @@ public class EventType {
 
 	private long eventTypeId;
 	
-	private String eventDesription;
+	private String eventDescription;
 	
 	
 	private Set<History> history;
@@ -32,11 +32,11 @@ public class EventType {
 	}
 	@Column(name = "type_description")
 	public String getEventDesription() {
-		return eventDesription;
+		return eventDescription;
 	}
 
 	public void setEventDesription(String eventDesription) {
-		this.eventDesription = eventDesription;
+		this.eventDescription = eventDesription;
 	}
 	@JsonIgnore
 	@OneToMany(mappedBy="eventType")

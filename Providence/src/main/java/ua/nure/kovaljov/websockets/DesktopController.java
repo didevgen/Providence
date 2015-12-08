@@ -63,8 +63,8 @@ public class DesktopController {
 		Transaction[] transactions = new Gson().fromJson(message, Transaction[].class);
 		List<TransactionModel> model = TransactionModel.getModelFromTransaction(transactions);
 		new TransactionService().insertTransactionModels(model);
-//		WSBridge bridge = new WSBridge();
-//		bridge.transferToClient(new Gson().toJson(model));
+		WSBridge bridge = new WSBridge();
+		bridge.transferToClient(new Gson().toJson(model));
 	}
 
 	@OnError
