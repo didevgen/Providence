@@ -3,6 +3,8 @@ package ua.nure.kovaljov.database.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -13,7 +15,7 @@ import ua.nure.kovaljov.entity.dbentity.User;
 import ua.nure.kovaljov.utils.HibernateUtil;
 
 public class UserDAOImpl extends BaseCRUD implements UserDAO {
-
+	private Logger log = LogManager.getLogger(UserDAOImpl.class);
 	@Override
 	public User getUser(long objectId, Class<User> className) {
 		Session session = null;
@@ -25,7 +27,7 @@ public class UserDAOImpl extends BaseCRUD implements UserDAO {
 				Hibernate.initialize(group);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e);
 		} finally {
 			if (session != null && session.isOpen()) {
 				session.close();
@@ -49,6 +51,7 @@ public class UserDAOImpl extends BaseCRUD implements UserDAO {
 		return (User) super.updateObject(user);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<User> getAllUsers() {
 		Session session = null;
@@ -61,7 +64,7 @@ public class UserDAOImpl extends BaseCRUD implements UserDAO {
 				o.getGroups().forEach(item -> item.setUsers(null));
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e);
 		} finally {
 			if (session != null && session.isOpen()) {
 				session.close();
@@ -75,6 +78,7 @@ public class UserDAOImpl extends BaseCRUD implements UserDAO {
 		return getAllUsers();
 	}
 
+	@SuppressWarnings("unchecked")
 	public User getUserByCardNumber(long cardNumber) {
 		Session session = null;
 		List<User> user = new ArrayList<User>();
@@ -82,7 +86,7 @@ public class UserDAOImpl extends BaseCRUD implements UserDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			user = session.createCriteria(User.class).add(Restrictions.eq("cardNumber", cardNumber)).list();
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e);
 		} finally {
 			if (session != null && session.isOpen()) {
 				session.close();

@@ -3,6 +3,8 @@ package ua.nure.kovaljov.database.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -10,7 +12,7 @@ import ua.nure.kovaljov.database.dao.CRUD;
 import ua.nure.kovaljov.utils.HibernateUtil;
 
 public class BaseCRUD implements CRUD{
-
+	private Logger log = LogManager.getLogger(BaseCRUD.class);
 	@Override
 	public Object getObject(long objectId,Class<?> clazzName) {
 		Session session = null;
@@ -19,7 +21,7 @@ public class BaseCRUD implements CRUD{
 			session = HibernateUtil.getSessionFactory().openSession();
 			clazz = session.load(clazzName, objectId);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e);
 		} finally {
 			if (session != null && session.isOpen()) {
 				session.close();
@@ -37,7 +39,7 @@ public class BaseCRUD implements CRUD{
 			session.save(obj);
 			session.getTransaction().commit();
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			log.error(e);
 		} finally {
 			if (session != null && session.isOpen()) {
 				session.close();
@@ -56,7 +58,7 @@ public class BaseCRUD implements CRUD{
 			q.executeUpdate();
 			session.getTransaction().commit();
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			log.error(e);
 		} finally {
 			if (session != null && session.isOpen()) {
 				session.close();
@@ -73,7 +75,7 @@ public class BaseCRUD implements CRUD{
 			session.update(anotherObject);
 			session.getTransaction().commit();
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			log.error(e);
 		} finally {
 			if (session != null && session.isOpen()) {
 				session.close();
@@ -82,6 +84,7 @@ public class BaseCRUD implements CRUD{
 		return anotherObject;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Object> getAllObjects(Class<?> classCriteria) {
 		Session session = null;
@@ -90,7 +93,7 @@ public class BaseCRUD implements CRUD{
 			session = HibernateUtil.getSessionFactory().openSession();
 			objects = session.createCriteria(classCriteria).list();
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e);
 		} finally {
 			if (session != null && session.isOpen()) {
 				session.close();

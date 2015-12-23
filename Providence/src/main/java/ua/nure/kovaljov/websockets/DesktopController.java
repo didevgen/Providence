@@ -11,6 +11,9 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.google.gson.Gson;
 
 import ua.nure.kovaljov.entity.Transaction;
@@ -22,15 +25,13 @@ import ua.nure.kovaljov.websockets.service.WSBridge;
 @ServerEndpoint(value = "/desktop")
 public class DesktopController {
 
-
+	private Logger log = LogManager.getLogger(DesktopController.class);
 	public void addSession(Session session) {
-		System.out.println("session added");
 		WSContainer.desktopSessions.add(session);
 	}
 
 	public void removeSession(Session session) {
 		WSContainer.desktopSessions.remove(session);
-		System.out.println("session removed");
 	}
 
 	@OnOpen
@@ -49,7 +50,6 @@ public class DesktopController {
 
 	@OnMessage
 	public void handleMessage(String message, Session session) {
-		System.out.println("desktopController");
 		if (message.equals("getLastDate")) {
 			Date date  = new TransactionService().getLastDate();
 			if (date == null) {
@@ -63,13 +63,13 @@ public class DesktopController {
 		Transaction[] transactions = new Gson().fromJson(message, Transaction[].class);
 		List<TransactionModel> model = TransactionModel.getModelFromTransaction(transactions);
 		new TransactionService().insertTransactionModels(model);
+		log.info(model);
 		WSBridge bridge = new WSBridge();
 		bridge.transferToClient(new Gson().toJson(model));
 	}
 
 	@OnError
 	public void onError(Throwable t, Session session) throws Throwable {
-		System.out.println(t.getMessage());
 	}
 
 	

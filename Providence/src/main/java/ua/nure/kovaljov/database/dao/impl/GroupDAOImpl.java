@@ -3,6 +3,8 @@ package ua.nure.kovaljov.database.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 
@@ -12,7 +14,7 @@ import ua.nure.kovaljov.entity.dbentity.User;
 import ua.nure.kovaljov.utils.HibernateUtil;
 
 public class GroupDAOImpl extends BaseCRUD implements GroupDAO{
-
+	private Logger log = LogManager.getLogger(GroupDAOImpl.class);
 	@Override
 	public Group getGroup(long objectId, Class<Group> className) {
 		Session session = null;
@@ -24,7 +26,7 @@ public class GroupDAOImpl extends BaseCRUD implements GroupDAO{
 				Hibernate.initialize(user);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e);
 		} finally {
 			if (session != null && session.isOpen()) {
 				session.close();
@@ -51,6 +53,7 @@ public class GroupDAOImpl extends BaseCRUD implements GroupDAO{
 		return (Group) super.updateObject(group);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Group> getAllGroups() {
 		Session session = null;
@@ -63,7 +66,7 @@ public class GroupDAOImpl extends BaseCRUD implements GroupDAO{
 				o.getUsers().forEach(item->item.setGroups(null));
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e);
 		} finally {
 			if (session != null && session.isOpen()) {
 				session.close();

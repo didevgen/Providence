@@ -13,13 +13,11 @@ import ua.nure.kovaljov.websockets.container.WSContainer;
 public class WebSocketController {
 
 	public void addSession(Session session) {
-		System.out.println("session added");
 		WSContainer.webSessions.add(session);
 	}
 
 	public void removeSession(Session session) {
 		WSContainer.webSessions.remove(session);
-		System.out.println("session removed");
 	}
 
 	@OnOpen
@@ -38,12 +36,10 @@ public class WebSocketController {
 
 	@OnMessage
 	public void handleMessage(String message, Session session) {
-		System.out.println("message");
 	}
 
 	@OnError
 	public void onError(Throwable t, Session session) throws Throwable {
-		System.out.println("error");
 	}
 
 	

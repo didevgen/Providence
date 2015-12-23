@@ -5,6 +5,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -17,7 +19,7 @@ import ua.nure.kovaljov.model.TransactionModel;
 import ua.nure.kovaljov.utils.HibernateUtil;
 
 public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
-
+	private Logger log = LogManager.getLogger(TransactionDAOImpl.class);
 	@Override
 	public Date getLatestDate() {
 		Session session = null;
@@ -26,7 +28,7 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			date = (Date) session.createSQLQuery("Select Max(transaction.time) from transaction ").list().get(0);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e);
 		} finally {
 			if (session != null && session.isOpen()) {
 				session.close();
@@ -38,7 +40,6 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 	@Override
 	public void insertTransactions(List<TransactionModel> transactions) {
 		Session session = null;
-		long event_id = 0;
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			session.beginTransaction();
@@ -52,14 +53,12 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 				insertQuery.setParameter(3, model.getInOutState());
 				insertQuery.setParameter(4, model.getTime());
 				insertQuery.setLong(5, model.getCardId());
-				event_id = model.getEventId();
 				insertQuery.executeUpdate();
 				getUserByCard(model.getCardId());
 			}
 			session.getTransaction().commit();
 		} catch (Exception e) {
-			System.out.println(event_id);
-			e.printStackTrace();
+			log.error(e);
 			session.getTransaction().rollback();
 		} finally {
 			if (session != null && session.isOpen()) {
@@ -92,7 +91,7 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 				return lst.get(0);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e);
 		} finally {
 			if (session != null && session.isOpen()) {
 				session.close();
@@ -146,7 +145,7 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			objects = session.createCriteria(History.class).add(Restrictions.ge("time", c.getTime())).add(Restrictions.ne("cardId", 0L)).list();
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e);
 		} finally {
 			if (session != null && session.isOpen()) {
 				session.close();
@@ -168,6 +167,7 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 		return history;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<History> getHistoryByCardNumber(long cardNumber) {
 		Session session = null;
@@ -178,7 +178,7 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			objects = session.createCriteria(History.class).add(Restrictions.eq("cardId", cardNumber)).list();
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e);
 		} finally {
 			if (session != null && session.isOpen()) {
 				session.close();

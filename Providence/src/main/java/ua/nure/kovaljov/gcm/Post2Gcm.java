@@ -14,9 +14,7 @@ import ua.nure.kovaljov.entity.dbentity.History;
 
 public class Post2Gcm {
 	public static void post(String apiKey, History content) {
-
 		try {
-
 			URL url = new URL("https://android.googleapis.com/gcm/send");
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("POST");
@@ -28,9 +26,6 @@ public class Post2Gcm {
 			mapper.writeValue(wr, content);
 			wr.flush();
 			wr.close();
-			int responseCode = conn.getResponseCode();
-			System.out.println("\nSending 'POST' request to URL : " + url);
-			System.out.println("Response Code : " + responseCode);
 			BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 			String inputLine;
 			StringBuffer response = new StringBuffer();
@@ -39,9 +34,6 @@ public class Post2Gcm {
 				response.append(inputLine);
 			}
 			in.close();
-
-			System.out.println(response.toString());
-
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

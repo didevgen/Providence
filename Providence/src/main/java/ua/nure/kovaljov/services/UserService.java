@@ -3,24 +3,32 @@ package ua.nure.kovaljov.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ua.nure.kovaljov.database.dao.impl.UserDAOImpl;
 import ua.nure.kovaljov.entity.dbentity.Group;
 import ua.nure.kovaljov.entity.dbentity.User;
 import ua.nure.kovaljov.websockets.container.WSContainer;
 
 public class UserService {
+	private Logger log = LogManager.getLogger(UserService.class);
 	public User insertUser(User user) {
+		log.entry(user);
 		String card = String.valueOf(user.getCardNumber());
 		if (card.length() == 7) {
+			log.info("card.length() == 7");
 			WSContainer.sendToAllDesktopConnectedSessions("Insert:" + card);
 		}
 		return new UserDAOImpl().insertUser(user);
 	}
 
 	public User updateUser(User user) {
+		log.entry(user);
 		long cardId = getUser(user.getUserId()).getCardNumber();
 		if (cardId != user.getCardNumber()) {
 			String card = String.valueOf(cardId);
+			log.info(card);
 			if (card.length() == 7) {
 				WSContainer.sendToAllDesktopConnectedSessions("Delete:" + card);
 			}
@@ -34,6 +42,7 @@ public class UserService {
 	}
 
 	public void deleteUser(long userId) {
+		log.entry(userId);
 		long cardId = getUser(userId).getCardNumber();
 		new UserDAOImpl().deleteUser(userId, "User");
 		String card = String.valueOf(cardId);
