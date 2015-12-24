@@ -11,21 +11,19 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.google.gson.Gson;
 
 import ua.nure.kovaljov.entity.Transaction;
+import ua.nure.kovaljov.entity.dbentity.History;
 import ua.nure.kovaljov.model.TransactionModel;
 import ua.nure.kovaljov.services.TransactionService;
+import ua.nure.kovaljov.utils.WSHelper;
 import ua.nure.kovaljov.websockets.container.WSContainer;
 import ua.nure.kovaljov.websockets.service.WSBridge;
 
 @ServerEndpoint(value = "/desktop")
 public class DesktopController {
 
-	private Logger log = LogManager.getLogger(DesktopController.class);
 	public void addSession(Session session) {
 		WSContainer.desktopSessions.add(session);
 	}
@@ -63,13 +61,14 @@ public class DesktopController {
 		Transaction[] transactions = new Gson().fromJson(message, Transaction[].class);
 		List<TransactionModel> model = TransactionModel.getModelFromTransaction(transactions);
 		new TransactionService().insertTransactionModels(model);
-		log.info(model);
+		List<History> resultHistory = new TransactionService().getLatestHistory(WSHelper.getMinDate(model));
 		WSBridge bridge = new WSBridge();
-		bridge.transferToClient(new Gson().toJson(model));
+		bridge.transferToClient(new Gson().toJson(resultHistory));
 	}
 
 	@OnError
 	public void onError(Throwable t, Session session) throws Throwable {
+		t.printStackTrace();
 	}
 
 	

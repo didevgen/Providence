@@ -19,7 +19,7 @@ import ua.nure.kovaljov.model.TransactionModel;
 import ua.nure.kovaljov.utils.HibernateUtil;
 
 public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
-	private Logger log = LogManager.getLogger(TransactionDAOImpl.class);
+
 	@Override
 	public Date getLatestDate() {
 		Session session = null;
@@ -28,7 +28,7 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			date = (Date) session.createSQLQuery("Select Max(transaction.time) from transaction ").list().get(0);
 		} catch (Exception e) {
-			log.error(e);
+			e.printStackTrace();
 		} finally {
 			if (session != null && session.isOpen()) {
 				session.close();
@@ -54,11 +54,10 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 				insertQuery.setParameter(4, model.getTime());
 				insertQuery.setLong(5, model.getCardId());
 				insertQuery.executeUpdate();
-				getUserByCard(model.getCardId());
 			}
 			session.getTransaction().commit();
 		} catch (Exception e) {
-			log.error(e);
+			e.printStackTrace();
 			session.getTransaction().rollback();
 		} finally {
 			if (session != null && session.isOpen()) {
@@ -91,7 +90,7 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 				return lst.get(0);
 			}
 		} catch (Exception e) {
-			log.error(e);
+			e.printStackTrace();
 		} finally {
 			if (session != null && session.isOpen()) {
 				session.close();
@@ -113,21 +112,12 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 	public List<History> getAllHistory() {
 		List<User> cardNumbers = new ArrayList<>();
 		List<History> history = new ArrayList<History>();
-		List<Object> objects = super.getAllObjects(History.class);
-		for (Object o : objects) {
-			History h = (History) o;
-			if (h.getCardId() == 0) {
-				continue;
-			}
-			User user = getUserByCard(cardNumbers, h.getCardId());
-			if (user == null) {
-				user = getUserByCard(h.getCardId());
-				cardNumbers.add(user);
-			}
-			user.setGroups(null);
-			h.setUser(user);
-			history.add(h);
+		List<History> objects = new ArrayList<>();
+		List<Object> obj = super.getAllObjects(History.class);
+		for (Object o: obj) {
+			objects.add((History)o);
 		}
+		fillWithUsers(objects, cardNumbers, history);
 		return history;
 	}
 
@@ -143,27 +133,16 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 		List<History> objects = new ArrayList<History>();
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
-			objects = session.createCriteria(History.class).add(Restrictions.ge("time", c.getTime())).add(Restrictions.ne("cardId", 0L)).list();
+			objects = session.createCriteria(History.class).add(Restrictions.ge("time", c.getTime()))
+					.add(Restrictions.ne("cardId", 0L)).list();
 		} catch (Exception e) {
-			log.error(e);
+			e.printStackTrace();
 		} finally {
 			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
-		for (History h : objects) {
-			if (h.getCardId() == 0) {
-				continue;
-			}
-			User user = getUserByCard(cardNumbers, h.getCardId());
-			if (user == null) {
-				user = getUserByCard(h.getCardId());
-				cardNumbers.add(user);
-			}
-			user.setGroups(null);
-			h.setUser(user);
-			history.add(h);
-		}
+		fillWithUsers(objects, cardNumbers, history);
 		return history;
 	}
 
@@ -178,12 +157,40 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			objects = session.createCriteria(History.class).add(Restrictions.eq("cardId", cardNumber)).list();
 		} catch (Exception e) {
-			log.error(e);
+			e.printStackTrace();
 		} finally {
 			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
+		fillWithUsers(objects, cardNumbers, history);
+		return history;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<History> getHistoryGreaterThanDate(Date date) {
+		Session session = null;
+		List<User> cardNumbers = new ArrayList<>();
+		List<History> history = new ArrayList<History>();
+		List<History> objects = new ArrayList<History>();
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			objects = session.createCriteria(History.class).add(Restrictions.ge("time", date))
+					.add(Restrictions.ne("cardId", 0L)).list();
+			
+		} catch (Exception e) {
+			 e.printStackTrace();
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
+		}
+		fillWithUsers(objects, cardNumbers, history);
+		return history;
+	}
+
+	private void fillWithUsers(List<History> objects, List<User> cardNumbers, List<History> history) {
 		for (History h : objects) {
 			if (h.getCardId() == 0) {
 				continue;
@@ -197,7 +204,5 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 			h.setUser(user);
 			history.add(h);
 		}
-		return history;
 	}
-
 }

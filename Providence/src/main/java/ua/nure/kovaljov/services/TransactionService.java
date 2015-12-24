@@ -27,4 +27,7 @@ public class TransactionService {
 	public List<History> getUserHistory(long cardNumber){
 		return new TransactionDAOImpl().getHistoryByCardNumber(cardNumber);
 	}
+	public List<History> getLatestHistory(Date date){
+		return new TransactionDAOImpl().getHistoryGreaterThanDate(date);
+	}
 }

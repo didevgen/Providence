@@ -18,7 +18,7 @@ public class VerifyMode {
 	
 	private String modeDescription;
 	
-	private Set<History> history;
+	private transient Set<History> history;
 
 	@Id
 	@Column(name = "verify_id")

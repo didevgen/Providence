@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -45,7 +46,7 @@ public class History {
 	public void setTransactionId(long transactionId) {
 		this.transactionId = transactionId;
 	}
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "verify_id")
 	public VerifyMode getVerifyMode() {
 		return verifyMode;
@@ -55,7 +56,7 @@ public class History {
 		this.verifyMode = verifyMode;
 	}
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "event_id")
 	public EventType getEventType() {
 		return eventType;

@@ -16,4 +16,6 @@ public interface TransactionDAO {
 	List<History> getMonthHistory();
 	
 	List<History> getHistoryByCardNumber(long cardNumber);
+	
+	List<History> getHistoryGreaterThanDate(Date date);
 }

@@ -19,7 +19,7 @@ public class EventType {
 	private String eventDescription;
 	
 	
-	private Set<History> history;
+	private transient Set<History> history;
 
 	@Id
 	@Column(name = "event_id")
