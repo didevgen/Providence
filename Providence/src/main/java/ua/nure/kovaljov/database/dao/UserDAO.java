@@ -16,4 +16,6 @@ public interface UserDAO {
 	List<User> getAllUsers();
 	
 	List<User> userWithoutGroup();
+	
+	void deleteUserByCardNumber(long cardId, String objectName);
 }

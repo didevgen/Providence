@@ -95,4 +95,9 @@ public class UserDAOImpl extends BaseCRUD implements UserDAO {
 		return user.size() == 0 ? null : user.get(0);
 	}
 
+	@Override
+	public void deleteUserByCardNumber(long cardId, String objectName) {
+		super.deleteObject(cardId, objectName, "cardNumber");
+	}
+
 }

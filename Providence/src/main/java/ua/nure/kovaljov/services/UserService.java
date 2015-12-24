@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import ua.nure.kovaljov.database.dao.UserDAO;
 import ua.nure.kovaljov.database.dao.impl.UserDAOImpl;
 import ua.nure.kovaljov.entity.dbentity.Group;
 import ua.nure.kovaljov.entity.dbentity.User;
@@ -25,7 +26,10 @@ public class UserService {
 
 	public User updateUser(User user) {
 		log.entry(user);
+		UserDAO dao = new UserDAOImpl();
 		long cardId = getUser(user.getUserId()).getCardNumber();
+		log.info(cardId);
+		log.info(user.getCardNumber());
 		if (cardId != user.getCardNumber()) {
 			String card = String.valueOf(cardId);
 			log.info(card);
@@ -33,12 +37,14 @@ public class UserService {
 				WSContainer.sendToAllDesktopConnectedSessions("Delete:" + card);
 			}
 			card = String.valueOf(user.getCardNumber());
+			log.info(card);
 			if (card.length() == 7) {
 				WSContainer.sendToAllDesktopConnectedSessions("Insert:" + card);
 			}
 		}
 		user.getGroups().forEach(item -> item.setUsers(null));
-		return new UserDAOImpl().updateUser(user);
+		dao.deleteUserByCardNumber(cardId, "User");
+		return dao.updateUser(user);
 	}
 
 	public void deleteUser(long userId) {
