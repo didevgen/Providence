@@ -18,4 +18,6 @@ public interface UserDAO {
 	List<User> userWithoutGroup();
 	
 	void deleteUserByCardNumber(long cardId, String objectName);
+	
+	User getUserForAuth(String email);
 }

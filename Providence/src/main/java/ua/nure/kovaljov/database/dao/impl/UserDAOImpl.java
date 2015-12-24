@@ -100,4 +100,9 @@ public class UserDAOImpl extends BaseCRUD implements UserDAO {
 		super.deleteObject(cardId, objectName, "cardNumber");
 	}
 
+	@Override
+	public User getUserForAuth(String email) {
+		return null;
+	}
+
 }

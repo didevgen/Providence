@@ -22,6 +22,7 @@ public class User {
 	private String userName;
 	private long cardNumber;
 	private String email;
+	private String password;
 
 	private Set<Group> groups = new HashSet<Group>();
 
@@ -87,6 +88,14 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [userName=" + userName + ", cardNumber=" + cardNumber + "]";
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 	
