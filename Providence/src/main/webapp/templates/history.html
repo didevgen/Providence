@@ -17,6 +17,7 @@
 				<table class="table">
 					<thead>
 						<tr>
+							<th>User name</th>
 							<th>Card Number</th>
 							<th>Time</th>
 							<th>Event</th>
@@ -25,12 +26,13 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr class="success" ng-repeat="x in names">
+						<tr class="success" ng-repeat="x in getLastTenItems()">
+							<td>{{ x.user.userName }}</td>
 							<td>{{ x.cardId }}</td>
-							<td>{{ x.time }}</td>
-							<td>{{ x.event }}</td>
+							<td>{{ formatTime(x.time) }}</td>
+							<td>{{ x.eventType.eventDescription }}</td>
 							<td>{{ x.doorId }}</td>
-							<td>{{ x.verified }}</td>
+							<td>{{ x.verifyMode.modeDescription }}</td>
 						</tr>
 					</tbody>
 				</table>

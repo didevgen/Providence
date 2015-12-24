@@ -13,11 +13,14 @@ app.controller('userHistory', function ($scope) {
     $scope.names = []; 
     $scope.getLastTenItems = function(){
     	if ($scope.names.length<=10){
-    		return $scope.names;
+    		return $scope.names.reverse();
     	}
     	else{
-    		return $scope.names.slice(0,10);
+    		return $scope.names.reverse().slice(0,10);
     	}
+    }
+    $scope.formatTime = function(time) {
+    	return moment(time).format('DD.MM.YYYY HH:mm:ss');
     }
     function listener(data) {
         var messageObj = data;
