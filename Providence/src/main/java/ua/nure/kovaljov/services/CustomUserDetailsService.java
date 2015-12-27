@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -20,8 +19,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 	private UserDAO userDao;
 
 	@Override
-	public UserDetails loadUserByUsername(final String email) 
-               throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
 
 		ua.nure.kovaljov.entity.dbentity.User user = userDao.getUserForAuth(email);
 		if (user == null) {
@@ -30,24 +28,18 @@ public class CustomUserDetailsService implements UserDetailsService {
 		List<GrantedAuthority> authorities = buildUserAuthority();
 
 		return buildUserForAuthentication(user, authorities);
-		
 
 	}
 
-	private User buildUserForAuthentication(ua.nure.kovaljov.entity.dbentity.User user, 
-		List<GrantedAuthority> authorities) {
-		return new User(user.getEmail(), 
-			user.getPassword(), true, 
-                        true, true, true, authorities);
+	private User buildUserForAuthentication(ua.nure.kovaljov.entity.dbentity.User user,
+			List<GrantedAuthority> authorities) {
+		return new User(user.getEmail(), user.getPassword(), true, true, true, true, authorities);
 	}
 
 	private List<GrantedAuthority> buildUserAuthority() {
 
 		Set<GrantedAuthority> setAuths = new HashSet<GrantedAuthority>();
-
-		// Build user's authorities
-			setAuths.add(new SimpleGrantedAuthority("ADMIN"));
-
+		setAuths.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 		List<GrantedAuthority> Result = new ArrayList<GrantedAuthority>(setAuths);
 
 		return Result;

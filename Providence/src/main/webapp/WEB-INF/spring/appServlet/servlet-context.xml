@@ -16,7 +16,6 @@
 	<resources mapping="/resources/**" location="/resources/" />
 	<resources mapping="/static/**" location="/static/" />
 	<resources mapping="/**" location="/" />
-
 	
 	<context:component-scan base-package="ua.nure.kovaljov" />
 	
