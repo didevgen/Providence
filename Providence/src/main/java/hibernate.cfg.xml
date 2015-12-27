@@ -9,9 +9,12 @@
 		<property name="hibernate.connection.driver_class">
 			com.mysql.jdbc.Driver
 		</property>
-		<property name="hibernate.connection.url">
+		 <property name="hibernate.connection.url">
 			jdbc:mysql://localhost:3306/providence
-		</property>
+		</property> 
+		<!--<property name="hibernate.connection.url">
+			jdbc:mysql://${OPENSHIFT_MYSQL_DB_HOST}:${OPENSHIFT_MYSQL_DB_PORT}/app
+		</property> -->
 		<property name="hibernate.connection.useUnicode">
 			true
 		</property>
@@ -21,11 +24,17 @@
 		<property name="hibernate.connection.charSet">
 			utf8
 		</property>
-		<property name="hibernate.connection.username">
+		 <property name="hibernate.connection.username">
 			root
 		</property>
 		<property name="hibernate.connection.password">
 		</property>
+		<!-- <property name="hibernate.connection.username">
+			adminQ9YLGu9
+		</property>
+		<property name="hibernate.connection.password">
+			etsWPHJMM4ri
+		</property> -->
 		<mapping class="ua.nure.kovaljov.entity.dbentity.User" />
 		<mapping class="ua.nure.kovaljov.entity.dbentity.Group" />
 		<mapping class="ua.nure.kovaljov.entity.dbentity.History" />

@@ -63,7 +63,6 @@
                 <span id="reauth-email" class="reauth-email"></span>
                 <input type="text" class="form-control" id="username" name="ssoId" placeholder="Enter Username" required>
 <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" required>
-                <input type="hidden" name="${_csrf.parameterName}"   value="${_csrf.token}" />
                                  
                 <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Login</button>
             </form><!-- /form -->

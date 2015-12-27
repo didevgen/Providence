@@ -1,7 +1,7 @@
 app.controller('userHistory', function ($scope) {
 	$scope.message = 'This mode is for real-time looking for activity';
 	
-	var ws = new WebSocket("ws://localhost:8080/kovaljov/websocket");
+	var ws = new WebSocket("ws://"+location.hostname+":"+location.port+"/kovaljov/websocket");
 	
 	ws.onopen = function(){  
         console.log("Socket has been opened!");  

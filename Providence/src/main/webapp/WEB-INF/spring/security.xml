@@ -6,13 +6,17 @@
       
      <http auto-config="true" >
         <intercept-url pattern="/" access="permitAll" />
-        <intercept-url pattern="/templates/*" access="hasRole('ADMIN')" />
+        <intercept-url pattern="/templates/*" access="hasRole('ROLE_ADMIN')" />
+         <intercept-url pattern="/group/*" access="hasRole('ROLE_ADMIN')" />
+          <intercept-url pattern="/user/*" access="hasRole('ROLE_ADMIN')" />
+          <intercept-url pattern="/transaction/*" access="hasRole('ROLE_ADMIN')" />
+          <intercept-url pattern="/websocket" access="hasRole('ROLE_ADMIN')" />
         <form-login  login-page="/index.jsp" 
         username-parameter="ssoId" 
         password-parameter="password" 
         authentication-failure-url="/login?error" 
         default-target-url="/templates/admin.html" />
-        <csrf/>
+        <csrf disabled="true"/>
     </http>
   
     <authentication-manager >

@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration  status="ALL">
-  <Appenders>
-    <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%throwable%n"/>
-        </Console>
-  </Appenders>
-  <Loggers>
-  <Logger name="org.hibernate" level="error" additivity="false">
-            <AppenderRef ref="Console"/>
-        </Logger>
-    <Root level="ALL">
-      <AppenderRef ref="Console"/>
-    </Root>
-  </Loggers>
+<Configuration status="ALL">
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%throwable%n" />
+		</Console>
+		<File name="File" fileName="app.log">
+			<PatternLayout
+				pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%throwable%n" />
+		</File>
+	</Appenders>
+	<Loggers>
+		<Logger name="org.hibernate" level="error" additivity="false">
+			<AppenderRef ref="Console" />
+		</Logger>
+		<Root level="ALL">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="File"/>
+		</Root>
+	</Loggers>
 </Configuration>
