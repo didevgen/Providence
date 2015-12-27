@@ -42,7 +42,9 @@ public class UserService {
 				WSContainer.sendToAllDesktopConnectedSessions("Insert:" + card);
 			}
 		}
-		user.getGroups().forEach(item -> item.setUsers(null));
+		for (Group gr : user.getGroups()) {
+			gr.setUsers(null);
+		}
 		dao.deleteUserByCardNumber(cardId, "User");
 		return dao.updateUser(user);
 	}

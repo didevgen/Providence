@@ -63,7 +63,9 @@ public class GroupDAOImpl extends BaseCRUD implements GroupDAO{
 			objects = session.createCriteria(Group.class).list();
 			for(Group o : objects) {
 				Hibernate.initialize(o.getUsers());
-				o.getUsers().forEach(item->item.setGroups(null));
+				for (User user : o.getUsers()) {
+					user.setGroups(null);
+				}
 			}
 		} catch (Exception e) {
 			log.error(e);

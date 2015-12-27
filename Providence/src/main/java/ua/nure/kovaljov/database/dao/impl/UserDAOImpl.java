@@ -61,7 +61,9 @@ public class UserDAOImpl extends BaseCRUD implements UserDAO {
 			objects = session.createCriteria(User.class).list();
 			for (User o : objects) {
 				Hibernate.initialize(o.getGroups());
-				o.getGroups().forEach(item -> item.setUsers(null));
+				for (Group group : o.getGroups()) {
+					group.setUsers(null);
+				}
 			}
 		} catch (Exception e) {
 			log.error(e);
