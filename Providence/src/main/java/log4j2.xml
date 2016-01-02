@@ -5,18 +5,28 @@
 			<PatternLayout
 				pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%throwable%n" />
 		</Console>
-		<File name="File" fileName="app.log">
+		<File name="MyFile" fileName="logs/app.log">
 			<PatternLayout
-				pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%throwable%n" />
+				pattern="%d{yyyy-mm-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
 		</File>
+		<!-- the appenders for server 1 -->
+        <File name="appender-server-1-all" fileName="logs/server1-all.log" append="true">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+        </File>
+        <File name="appender-server-1-error" fileName="logs/server1-error.log" append="true">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+        </File>
+ 
 	</Appenders>
 	<Loggers>
 		<Logger name="org.hibernate" level="error" additivity="false">
-			<AppenderRef ref="Console" />
+			<appender-ref ref="MyFile" level="all" />
+			<AppenderRef ref="appender-server-1-all" level="ALL" />
+            <AppenderRef ref="appender-server-1-error" level="ERROR" />
 		</Logger>
 		<Root level="ALL">
 			<AppenderRef ref="Console" />
-			<AppenderRef ref="File"/>
+			<appender-ref ref="MyFile" level="all" />
 		</Root>
 	</Loggers>
 </Configuration>
