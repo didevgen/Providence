@@ -1,13 +1,19 @@
 package ua.nure.kovaljov.entity.dbentity;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -23,12 +29,15 @@ public class Room {
 	private String roomName;
 	
 	private String doorState;
+	private boolean isSubscribed;
 	
-	private transient Set<History> history;
+	private transient Set<History> history = new HashSet<>();
+	private transient Set<User> subscribers = new HashSet<>();
 	
 	public Room() {
 		
 	}
+	@Id
 	@GeneratedValue(generator = "increment")
 	@GenericGenerator(name = "increment", strategy = "increment")
 	@Column(name = "room_id")
@@ -38,7 +47,7 @@ public class Room {
 	public void setRoomId(int roomId) {
 		this.roomId = roomId;
 	}
-	@Id
+	
 	@Column(name="room_ip")
 	public String getRoomIp() {
 		return roomIp;
@@ -71,6 +80,15 @@ public class Room {
 	public void setHistory(Set<History> history) {
 		this.history = history;
 	}
+	@Transient
+	public boolean isSubscribed() {
+		return isSubscribed;
+	}
+	
+	public void setSubscribed(boolean isSubscribed) {
+		this.isSubscribed = isSubscribed;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -98,6 +116,17 @@ public class Room {
 	public String toString() {
 		return "Room [roomName=" + roomName + ", doorState=" + doorState + "]";
 	}
-	
+	@JsonIgnore
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "s_user_to_room", joinColumns = {
+			@JoinColumn(name = "room_id", nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "id", nullable = false, updatable = false) })
+	public Set<User> getSubscribers() {
+		return subscribers;
+	}
+
+	public void setSubscribers(Set<User> subscribers) {
+		this.subscribers = subscribers;
+	}
 	
 }

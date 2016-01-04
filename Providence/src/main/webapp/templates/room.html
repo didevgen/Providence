@@ -44,6 +44,11 @@
 											Cancel</button>
 									</form>
 									<div class="buttons" ng-show="!rowform.$visible">
+									<input bs-switch ng-model="room.subscribed"
+											switch-label="Subscribe" switch-on-color="success"
+											switch-off-color="danger" switch-on-text="Yes"
+											switch-off-text="No" type="checkbox" ng-true-value="true"
+											ng-false-value="false" ng-change="toggle(room,room.roomId)">
 										<button class="btn btn-primary" ng-click="rowform.$show()">Edit</button>
 										<button class="btn btn-danger"
 											ng-click="removeRoom($index,room.roomId)">Delete</button>

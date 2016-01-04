@@ -99,7 +99,7 @@ public class History {
 		this.person = person;
 	}
 	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name = "room_ip")
+	@JoinColumn(name = "room_id")
 	public Room getRoom() {
 		return room;
 	}

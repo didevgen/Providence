@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -13,6 +14,8 @@ import org.hibernate.criterion.Restrictions;
 import ua.nure.kovaljov.database.dao.TransactionDAO;
 import ua.nure.kovaljov.entity.dbentity.History;
 import ua.nure.kovaljov.entity.dbentity.Person;
+import ua.nure.kovaljov.entity.dbentity.Room;
+import ua.nure.kovaljov.entity.dbentity.User;
 import ua.nure.kovaljov.model.TransactionModel;
 import ua.nure.kovaljov.utils.HibernateUtil;
 
@@ -42,14 +45,15 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			session.beginTransaction();
 			for (TransactionModel model : transactions) {
-				SQLQuery insertQuery = session.createSQLQuery(
-						"INSERT IGNORE INTO `room` (`room_ip`,`room_name`,`door_state`) VALUES (?,'no name','entrance');");
-				insertQuery.setParameter(0, model.getDoorId());
-				insertQuery.executeUpdate();
-				SQLQuery insertQuery1 = session.createSQLQuery("INSERT INTO transaction (`verify_id`,`room_ip`,`event_id`,`inOutState`,`time`,`card_id`)"
+				Room room = new Room();
+				room.setDoorState("entrance");
+				room.setRoomIp(model.getDoorId());
+				room.setRoomName("no name");
+				Room r = new RoomDAOImpl().insertRoom(room);
+				SQLQuery insertQuery1 = session.createSQLQuery("INSERT INTO transaction (`verify_id`,`room_id`,`event_id`,`inOutState`,`time`,`card_id`)"
 				+ " VALUES(?,?,?,?,?,?);");
 				insertQuery1.setParameter(0, model.getVerifiedId());
-				insertQuery1.setParameter(1, model.getDoorId());
+				insertQuery1.setParameter(1, r.getRoomId());
 				insertQuery1.setParameter(2, model.getEventId());
 				insertQuery1.setParameter(3, model.getInOutState());
 				insertQuery1.setParameter(4, model.getTime());
@@ -85,11 +89,18 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 			cr.add(Restrictions.eq("cardNumber", cardId));
 			@SuppressWarnings("unchecked")
 			List<Person> lst = cr.list();
+			for (Person p : lst) {
+				Hibernate.initialize(p.getSubscribers());
+				for (User user : p.getSubscribers()) {
+					user.setSubsribedPersons(null);
+				}
+			}
 			if (lst.size() == 0) {
 				return insertUnregisteredPerson(cardId);
 			} else {
 				return lst.get(0);
 			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 
 import ua.nure.kovaljov.entity.Transaction;
 import ua.nure.kovaljov.entity.dbentity.History;
+import ua.nure.kovaljov.mail.SubscriptionHandler;
 import ua.nure.kovaljov.model.TransactionModel;
 import ua.nure.kovaljov.services.TransactionService;
 import ua.nure.kovaljov.utils.WSHelper;
@@ -62,6 +63,8 @@ public class DesktopController {
 		List<TransactionModel> model = TransactionModel.getModelFromTransaction(transactions);
 		new TransactionService().insertTransactionModels(model);
 		List<History> resultHistory = new TransactionService().getLatestHistory(WSHelper.getMinDate(model));
+		SubscriptionHandler handler = new SubscriptionHandler();
+		handler.handleSubscribers(resultHistory);
 		WSBridge bridge = new WSBridge();
 		bridge.transferToClient(new Gson().toJson(resultHistory));
 	}

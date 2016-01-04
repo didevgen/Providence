@@ -32,9 +32,9 @@ app
 						return Math.ceil($scope.rooms.length
 								/ $scope.itemsPerPage);
 					};
-					$scope.statuses = [{
+					$scope.statuses = [ {
 						text : 'entrance'
-					},{
+					}, {
 						text : 'exit'
 					} ];
 
@@ -44,9 +44,9 @@ app
 						});
 						return room.doorState;
 					};
-					$scope.saveRoom = function (data, id) {
-				        updateRoom(data,id);
-				    };
+					$scope.saveRoom = function(data, id) {
+						updateRoom(data, id);
+					};
 					$scope.getFilteredRooms = function() {
 						var begin = (($scope.currentPage - 1) * $scope.itemsPerPage), end = begin
 								+ $scope.itemsPerPage;
@@ -91,11 +91,11 @@ app
 						sendRequest("/kovaljov/room/all", {}, myFunc)
 					}
 
-					function updateRoom(room,id) {
+					function updateRoom(room, id) {
 						var myFunc = function(data) {
 							getAllRooms();
 						}
-						sendRequest("/kovaljov/room/update/"+id, room, myFunc);
+						sendRequest("/kovaljov/room/update/" + id, room, myFunc);
 					}
 
 					function sendRequest(urlPattern, dataObj, myFunc) {
@@ -112,4 +112,11 @@ app
 
 						});
 					}
+					$scope.toggle = function(user, id) {
+						var myFunc = function(data) {
+							getAllRooms();
+						}
+						$scope.isSelected = $scope.isSelected == true ? false : true;
+						sendRequest("/kovaljov/room/" + id + "/subscribe", {}, myFunc);
+					};
 				});
