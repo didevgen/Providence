@@ -23,18 +23,20 @@
 				</div>
 				<table class="table table-bordered table-hover table-condensed">
 					<tr style="font-weight: bold">
-						<td style="width: 20%">Name</td>
-						<td style="width: 20%">Card number</td>
-						<td style="width: 20%">Time</td>
-						<td style="width: 20%">Event</td>
-						<td style="width: 20%">Verify mode</td>
+						<td style="width: 16%">Name</td>
+						<td style="width: 16%">Room name</td>
+						<td style="width: 16%">Action</td>
+						<td style="width: 16%">Time</td>
+						<td style="width: 16%">Event</td>
+						<td style="width: 16%">Verify mode</td>
 					</tr>
 					<tr ng-show="transactions.length==0">
 						<td colspan="3">There is no history. Visit us soon</td>
 					</tr>
 					<tr ng-repeat="transaction in getFilteredTransactions()">
-						<td>{{ transaction.user.userName || '' }}</td>
-						<td>{{ transaction.cardId || '' }}</td>
+						<td>{{ transaction.person.personName || '' }}</td>
+						<td>{{ transaction.room.roomName || '' }}</td>
+						<td>{{ transaction.room.doorState || '' }}</td>
 						<td>{{ getNormalTime(transaction.time) || '' }}</td>
 						<td>{{ transaction.eventType.eventDesription || '' }}</td>
 						<td>{{ transaction.verifyMode.modeDescription || '' }}</td>

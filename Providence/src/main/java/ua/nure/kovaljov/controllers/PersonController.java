@@ -60,4 +60,10 @@ public class PersonController {
 		log.entry(userId,groupId);
 		service.removeGroupFromPerson(groupId, userId);
 	}
+	
+	@RequestMapping(value = "/user/{userId}/subscribe", method = RequestMethod.POST)
+	public void updateSubscription( @PathVariable int userId, Principal principal) {
+		log.entry(userId);
+		service.manageSubscription(userId, principal);
+	}
 }

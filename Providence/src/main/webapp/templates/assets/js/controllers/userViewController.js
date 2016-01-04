@@ -134,7 +134,11 @@ app.controller('userViewController', function ($scope, $filter, $http) {
 
         });
     }
-    $scope.toggle = function(id) {
+    $scope.toggle = function(user,id) {
+    	 var myFunc = function (data) {
+             getAllUsers();
+         }
         $scope.isSelected = $scope.isSelected ==true ? false : true;
+        sendRequest("/kovaljov/user/"+id+"/subscribe",{},myFunc);
       };
 });

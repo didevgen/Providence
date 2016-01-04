@@ -3,6 +3,7 @@ package ua.nure.kovaljov.services;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -94,5 +95,23 @@ public class PersonService {
 				return;
 			}
 		}
+	}
+	
+	public synchronized void manageSubscription(int personId, Principal principal) {
+		Person person = getPerson(personId);
+		Set<User> users = person.getSubscribers();
+		int counter = 0;
+		for (User user : users) {
+			if (user.getLogin().equals(principal.getName())) {
+				counter++;
+				users.remove(user);
+			}
+		}
+		if (counter==0) {
+			User user = new UserDAOImpl().getUser(principal.getName());
+			users.add(user);
+		}
+		person.setSubscribers(users);
+		updatePerson(person);
 	}
 }

@@ -24,6 +24,7 @@ public class PersonDAOImpl extends BaseCRUD implements PersonDAO {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			person = session.get(Person.class, objectId);
+			Hibernate.initialize(person.getSubscribers());
 			for (Group group : person.getGroups()) {
 				Hibernate.initialize(group);
 			}
