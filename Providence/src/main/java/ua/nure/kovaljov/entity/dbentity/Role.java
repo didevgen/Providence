@@ -26,7 +26,7 @@ public class Role {
         joinColumns = {@JoinColumn(name="role_id", referencedColumnName="id")},
         inverseJoinColumns = {@JoinColumn(name="user_id", referencedColumnName="id")}
     )
-    private Set<User> userRoles;
+    private transient Set<User> userRoles;
  
     public Integer getId() {
         return id;

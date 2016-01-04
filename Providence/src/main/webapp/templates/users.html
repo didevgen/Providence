@@ -66,23 +66,17 @@
 											Cancel</button>
 									</form>
 									<div class="buttons" ng-show="!rowform.$visible">
-									
-									
-									<input
-    bs-switch
-    ng-model="user.isSubscribed"
-    switch-label="Subscribe"
-    switch-on-color="success"
-    switch-off-color="danger"
-    switch-on-text ="Yes"
-    switch-off-text ="No"
-    type="checkbox"
-    ng-true-value="true"
-    ng-false-value="false"
-    ng-change="toggle(user.userId)">
-									
-									
-									<a ng-href="#/userHistory/{{user.cardNumber}}"><button class="btn btn-success">User history</button></a>
+
+
+										<input bs-switch ng-model="user.subscribed"
+											switch-label="Subscribe" switch-on-color="success"
+											switch-off-color="danger" switch-on-text="Yes"
+											switch-off-text="No" type="checkbox" ng-true-value="true"
+											ng-false-value="false" ng-change="toggle(user.userId)">
+
+
+										<a ng-href="#/userHistory/{{user.cardNumber}}"><button
+												class="btn btn-success">User history</button></a>
 										<button class="btn btn-primary" ng-click="rowform.$show()">Edit</button>
 										<button class="btn btn-danger"
 											ng-click="removeUser($index,user.personId)">Delete</button>
@@ -141,8 +135,8 @@
 									<div class="modal-body">
 										<div class="input-group">
 											<span class="input-group-addon "><i
-												class="fa fa-cubes"></i></span> <input id="group"
-												type="text" class="form-control" ng-model="name" name="name" value=""
+												class="fa fa-cubes"></i></span> <input id="group" type="text"
+												class="form-control" ng-model="name" name="name" value=""
 												placeholder="Group Name">
 										</div>
 									</div>

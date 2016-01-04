@@ -12,6 +12,7 @@ import org.hibernate.criterion.Restrictions;
 import ua.nure.kovaljov.database.dao.PersonDAO;
 import ua.nure.kovaljov.entity.dbentity.Group;
 import ua.nure.kovaljov.entity.dbentity.Person;
+import ua.nure.kovaljov.entity.dbentity.User;
 import ua.nure.kovaljov.utils.HibernateUtil;
 
 public class PersonDAOImpl extends BaseCRUD implements PersonDAO {
@@ -61,6 +62,10 @@ public class PersonDAOImpl extends BaseCRUD implements PersonDAO {
 			objects = session.createCriteria(Person.class).list();
 			for (Person o : objects) {
 				Hibernate.initialize(o.getGroups());
+				Hibernate.initialize(o.getSubscribers());
+				for (User user : o.getSubscribers()) {
+					user.setSubsribedPersons(null);
+				}
 				for (Group group : o.getGroups()) {
 					group.setPersons(null);
 				}

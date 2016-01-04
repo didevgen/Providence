@@ -46,8 +46,7 @@ public class PersonController {
 	@RequestMapping(value = "/user/all", method = RequestMethod.POST)
 	public List<Person> getAllPersons(Principal principal) {
 		log.entry();
-		log.info(principal.getName());
-		return service.getPersons();
+		return service.getPersons(principal);
 	}
 	
 	@RequestMapping(value = "/user/group/{groupId}", method = RequestMethod.POST)

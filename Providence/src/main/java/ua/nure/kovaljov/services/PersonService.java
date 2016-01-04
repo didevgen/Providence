@@ -1,5 +1,6 @@
 package ua.nure.kovaljov.services;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,8 +9,10 @@ import org.apache.logging.log4j.Logger;
 
 import ua.nure.kovaljov.database.dao.PersonDAO;
 import ua.nure.kovaljov.database.dao.impl.PersonDAOImpl;
+import ua.nure.kovaljov.database.dao.impl.UserDAOImpl;
 import ua.nure.kovaljov.entity.dbentity.Group;
 import ua.nure.kovaljov.entity.dbentity.Person;
+import ua.nure.kovaljov.entity.dbentity.User;
 import ua.nure.kovaljov.websockets.container.WSContainer;
 
 public class PersonService {
@@ -56,8 +59,15 @@ public class PersonService {
 		return new PersonDAOImpl().getPerson(userId, Person.class);
 	}
 
-	public List<Person> getPersons() {
-		return new PersonDAOImpl().getAllPersons();
+	public List<Person> getPersons(Principal principal) {
+		List<Person> persons = new PersonDAOImpl().getAllPersons();
+		User user = new UserDAOImpl().getUser(principal.getName());
+		for (Person person : persons) {
+			if (user.getSubsribedPersons().contains(person)) {
+				person.setSubscribed(true);
+			}
+		}
+		return persons;
 	}
 
 	public List<Person> getPersonsWithoutGroup(long groupId) {
