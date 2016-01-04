@@ -19,7 +19,7 @@ public class Group {
 	private long id;
 	private String name;
 
-	private Set<User> users = new HashSet<User>();
+	private Set<Person> persons = new HashSet<Person>();
 
 	public Group() {
 
@@ -41,17 +41,17 @@ public class Group {
 		this.id = id;
 	}
 
-	public void addUser(User user) {
-		this.users.add(user);
+	public void addPerson(Person person) {
+		this.persons.add(person);
 	}
 
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "groups")
-	public Set<User> getUsers() {
-		return users;
+	public Set<Person> getPersons() {
+		return persons;
 	}
 
-	public void setUsers(Set<User> users) {
-		this.users = users;
+	public void setPersons(Set<Person> persons) {
+		this.persons = persons;
 	}
 
 	@Column(name = "name")

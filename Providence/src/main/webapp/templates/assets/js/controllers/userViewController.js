@@ -1,7 +1,8 @@
 app.controller('userViewController', function ($scope, $filter, $http) {
-    $scope.itemsPerPage = 10;
+	$scope.itemsPerPage = 10;
     $scope.currentPage = 1;
     $scope.users = [];
+    $scope.isSelected = false;
     $scope.filteredUsers = $scope.users;
     $scope.searchText = "";
     getAllUsers();
@@ -17,7 +18,7 @@ app.controller('userViewController', function ($scope, $filter, $http) {
     };
     $scope.addUser = function () {
         $scope.inserted = {
-            name: '',
+        	personName: '',
             email: '',
             password: ''
         };
@@ -93,7 +94,7 @@ app.controller('userViewController', function ($scope, $filter, $http) {
 
     function insertUser(user,userId) {
         if (userId != undefined) {
-        	user.userId = userId;
+        	user.personId = userId;
             delete user.id;
             updateUser(user);
             return;
@@ -133,4 +134,7 @@ app.controller('userViewController', function ($scope, $filter, $http) {
 
         });
     }
+    $scope.toggle = function(id) {
+        $scope.isSelected = $scope.isSelected ==true ? false : true;
+      };
 });

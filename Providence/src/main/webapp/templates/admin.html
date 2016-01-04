@@ -10,6 +10,7 @@
 <link href="assets/css/basic.css" rel="stylesheet" />
 <link href="assets/css/custom.css" rel="stylesheet" />
 <link href="assets/css/xeditable.css" rel="stylesheet" />
+<link href="assets/css/bootstrap-switch.min.css" rel="stylesheet" />
 <link href='http://fonts.googleapis.com/css?family=Open+Sans'
 	rel='stylesheet' type='text/css' />
 </head>
@@ -35,106 +36,54 @@
 
 			</div>
 		</nav>
-		<!-- /. NAV TOP  -->
 		<nav class="navbar-default navbar-side" role="navigation">
 			<div class="sidebar-collapse">
-				<ul class="nav" id="main-menu">
-					<li>
-						<div class="user-img-div">
-							<img src="assets/img/crown.jpg" class="img-thumbnail" />
-
-							<div class="inner-text">
-								Administrator <br />
-							</div>
-						</div>
-
-					</li>
-
-
-					<li><a href="admin.html"><i class="fa fa-dashboard"></i>Dashboard</a>
-					</li>
-					<li><a href="#"><i class="fa fa-desktop "></i>UI Elements
-							<span class="fa arrow"></span></a>
-						<ul class="nav nav-second-level">
-							<li><a href="panel-tabs.html"><i class="fa fa-toggle-on"></i>Tabs
-									& Panels</a></li>
-						</ul></li>
-					<li><a href="#"><i class="fa fa-yelp "></i>Extra Pages <span
-							class="fa arrow"></span></a>
-						<ul class="nav nav-second-level">
-							<li><a href="invoice.html"><i class="fa fa-coffee"></i>Invoice</a>
-							</li>
-						</ul></li>
-					<li><a href="table.html"><i class="fa fa-flash "></i>Data
-							Tables </a></li>
-					<li><a href="#"><i class="fa fa-bicycle "></i>Forms <span
-							class="fa arrow"></span></a>
-						<ul class="nav nav-second-level">
-
-							<li><a href="form.html"><i class="fa fa-desktop "></i>Basic
-							</a></li>
-						</ul></li>
-					<li><a href="gallery.html"><i class="fa fa-anchor "></i>Gallery</a>
-					</li>
-					<li><a href="error.html"><i class="fa fa-bug "></i>Error
-							Page</a></li>
-					<li><a href="login.html"><i class="fa fa-sign-in "></i>Login
-							Page</a></li>
-					<li><a href="#"><i class="fa fa-sitemap "></i>Multilevel
-							Link <span class="fa arrow"></span></a>
-						<ul class="nav nav-second-level">
-							<li><a href="#"><i class="fa fa-bicycle "></i>Second
-									Level Link</a></li>
-							<li><a href="#"><i class="fa fa-flask "></i>Second Level
-									Link</a></li>
-							<li><a href="#">Second Level Link<span class="fa arrow"></span></a>
-								<ul class="nav nav-third-level">
-									<li><a href="#"><i class="fa fa-plus "></i>Third Level
-											Link</a></li>
-									<li><a href="#"><i class="fa fa-comments-o "></i>Third
-											Level Link</a></li>
-
-								</ul></li>
-						</ul></li>
-
-					<li><a class="active-menu" href="blank.html"><i
-							class="fa fa-square-o "></i>Blank Page</a></li>
-				</ul>
+				<div class="user-img-div">
+					<img src="assets/img/crown.jpg" class="img-thumbnail" />
+					<div class="inner-text">
+						Administrator <br />
+					</div>
+				</div>
 			</div>
-
 		</nav>
 		<div id="page-wrapper">
-			<div id="page-inner" >
+			<div id="page-inner">
 				<div class="row">
 					<div class="col-md-12">
 						<div class="panel panel-default">
 							<div class="panel-body">
 								<div class="row">
-									<div class="col-md-3 "><a ng-href="#/users">
-										<div class="alert alert-info text-center headerIcons">
-											<i class="fa fa-users fa-5x"></i>
-											<h4>Manage users</h4>
-										</div>
-										</a>
-									</div>
-									<div class="col-md-3 "><a ng-href="#/history">
-										<div class="alert alert-success text-center headerIcons">
-											<i class="fa fa-history fa-5x"></i>
-											<h4>View history</h4>
-										</div>
+									<div class="col-md-3 ">
+										<a ng-href="#/users">
+											<div class="alert alert-info text-center headerIcons">
+												<i class="fa fa-users fa-5x"></i>
+												<h4>Manage users</h4>
+											</div>
 										</a>
 									</div>
 									<div class="col-md-3 ">
-										<div class="alert alert-danger text-center headerIcons">
-											<i class="fa fa-lock fa-5x"></i>
-											<h4>Manage doors</h4>
-										</div>
+										<a ng-href="#/history">
+											<div class="alert alert-success text-center headerIcons">
+												<i class="fa fa-history fa-5x"></i>
+												<h4>View history</h4>
+											</div>
+										</a>
 									</div>
 									<div class="col-md-3 ">
-										<div class="alert alert-warning text-center headerIcons">
-											<i class="fa fa-cogs fa-5x"></i>
-											<h4>Settings</h4>
-										</div>
+										<a ng-href="#/room">
+											<div class="alert alert-danger text-center headerIcons">
+												<i class="fa fa-university fa-5x"></i>
+												<h4>Manage rooms</h4>
+											</div>
+										</a>
+									</div>
+									<div class="col-md-3 ">
+										<a ng-href="#/report">
+											<div class="alert alert-warning text-center headerIcons">
+												<i class="fa fa-paperclip fa-5x"></i>
+												<h4>Reports</h4>
+											</div>
+										</a>
 									</div>
 
 								</div>
@@ -142,16 +91,17 @@
 						</div>
 					</div>
 				</div>
-				<div class="row"  data-ng-view="">
-				</div>
+				<div class="row" data-ng-view=""></div>
 			</div>
 		</div>
 	</div>
-	
+
+	<script src="assets/js/jquery-2.1.4.min.js"></script>
 	<script src="assets/js/angular.min.js"></script>
 	<script src="assets/js/angular-route.min.js"></script>
-	<script src="assets/js/jquery-2.1.4.min.js"></script>
 	<script src="assets/js/bootstrap.js"></script>
+	<script src="assets/js/bootstrap-switch.min.js"></script>
+	<script src="assets/js/angular-bootstrap-switch.min.js"></script>
 	<script src="assets/js/ui-bootstrap-tpls-0.14.3.min.js"></script>
 	<script src="assets/js/xeditable.min.js"></script>
 	<script src="assets/js/moment.js"></script>
@@ -165,6 +115,9 @@
 	<script src="assets/js/controllers/groupDetailController.js"></script>
 	<script src="assets/js/controllers/groupMembersController.js"></script>
 	<script src="assets/js/controllers/transactionController.js"></script>
+	<script src="assets/js/controllers/roomController.js"></script>
+	<script src="assets/js/controllers/reportController.js"></script>
 	<script src="assets/js/custom.js"></script>
+	
 </body>
 </html>

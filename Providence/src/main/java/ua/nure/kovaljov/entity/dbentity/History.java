@@ -24,7 +24,7 @@ public class History {
 	
 	private EventType eventType;
 
-	private long doorId;
+	private Room room;
 	
 	private long inOutState;
 	
@@ -33,7 +33,7 @@ public class History {
 	private long cardId;
 	
 	
-	private User user;
+	private Person person;
 
 	@Id
 	@GeneratedValue(generator = "increment")
@@ -65,14 +65,6 @@ public class History {
 	public void setEventType(EventType eventType) {
 		this.eventType = eventType;
 	}
-	@Column(name = "door_id")
-	public long getDoorId() {
-		return doorId;
-	}
-
-	public void setDoorId(long doorId) {
-		this.doorId = doorId;
-	}
 	@Column(name = "inOutState")
 	public long getInOutState() {
 		return inOutState;
@@ -99,15 +91,21 @@ public class History {
 	}
 	
 	@Transient
-	public User getUser() {
-		return user;
+	public Person getPerson() {
+		return person;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setPerson(Person person) {
+		this.person = person;
 	}
-	
-	
-	
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name = "room_ip")
+	public Room getRoom() {
+		return room;
+	}
+
+	public void setRoom(Room room) {
+		this.room = room;
+	}
 	
 }

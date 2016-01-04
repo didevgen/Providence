@@ -14,7 +14,7 @@ public class TransactionModel {
 
 	private int verifiedId;
 
-	private int doorId;
+	private String doorId;
 
 	private int inOutState;
 
@@ -26,7 +26,7 @@ public class TransactionModel {
 	public TransactionModel() {
 	}
 
-	public TransactionModel(long cardId, int verifCode, int doorId, int eventId, int inOutState, String time) {
+	public TransactionModel(long cardId, int verifCode, String doorId, int eventId, int inOutState, String time) {
 		this.cardId = cardId;
 		this.doorId = doorId;
 		this.verifiedId = verifCode;
@@ -65,11 +65,11 @@ public class TransactionModel {
 		this.eventId = eventId;
 	}
 
-	public int getDoorId() {
+	public String getDoorId() {
 		return doorId;
 	}
 
-	public void setDoorId(int doorId) {
+	public void setDoorId(String doorId) {
 		this.doorId = doorId;
 	}
 

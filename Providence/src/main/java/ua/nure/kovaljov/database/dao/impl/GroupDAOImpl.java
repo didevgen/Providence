@@ -10,7 +10,7 @@ import org.hibernate.Session;
 
 import ua.nure.kovaljov.database.dao.GroupDAO;
 import ua.nure.kovaljov.entity.dbentity.Group;
-import ua.nure.kovaljov.entity.dbentity.User;
+import ua.nure.kovaljov.entity.dbentity.Person;
 import ua.nure.kovaljov.utils.HibernateUtil;
 
 public class GroupDAOImpl extends BaseCRUD implements GroupDAO{
@@ -22,8 +22,8 @@ public class GroupDAOImpl extends BaseCRUD implements GroupDAO{
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			group = session.get(Group.class, objectId);
-			for (User user : group.getUsers()) {
-				Hibernate.initialize(user);
+			for (Person person : group.getPersons()) {
+				Hibernate.initialize(person);
 			}
 		} catch (Exception e) {
 			log.error(e);
@@ -62,9 +62,9 @@ public class GroupDAOImpl extends BaseCRUD implements GroupDAO{
 			session = HibernateUtil.getSessionFactory().openSession();
 			objects = session.createCriteria(Group.class).list();
 			for(Group o : objects) {
-				Hibernate.initialize(o.getUsers());
-				for (User user : o.getUsers()) {
-					user.setGroups(null);
+				Hibernate.initialize(o.getPersons());
+				for (Person person : o.getPersons()) {
+					person.setGroups(null);
 				}
 			}
 		} catch (Exception e) {

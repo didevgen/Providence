@@ -4,7 +4,7 @@ import java.util.List;
 
 import ua.nure.kovaljov.database.dao.impl.GroupDAOImpl;
 import ua.nure.kovaljov.entity.dbentity.Group;
-import ua.nure.kovaljov.entity.dbentity.User;
+import ua.nure.kovaljov.entity.dbentity.Person;
 
 public class GroupService {
 	public Group insertGroup(Group group) {
@@ -19,7 +19,7 @@ public class GroupService {
 	public Group getGroup(long GroupId) {
 		Group group = new GroupDAOImpl().getGroup(GroupId, Group.class);
 		if (group!=null) {
-			for (User u : group.getUsers()) {
+			for (Person u : group.getPersons()) {
 				u.setGroups(null);
 			}
 		}

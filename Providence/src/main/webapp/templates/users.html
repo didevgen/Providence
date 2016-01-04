@@ -44,9 +44,9 @@
 							<tr ng-repeat="user in getFilteredUsers()">
 								<td>
 									<!-- editable username (text with validation) --> <span
-									editable-text="user.userName" e-name="userName"
+									editable-text="user.personName" e-name="personName"
 									e-form="rowform" e-required onbeforesave="checkName($data)">
-										{{ user.userName || '' }} </span>
+										{{ user.personName || '' }} </span>
 								</td>
 								<td><span editable-text="user.email" e-name="email"
 									e-form="rowform" e-required onbeforesave="checkEmail($data)">
@@ -56,7 +56,7 @@
 									e-form="rowform"> {{ user.cardNumber || '' }} </span></td>
 								<td style="white-space: nowrap">
 									<form editable-form name="rowform"
-										onbeforesave="saveUser($data, user.userId)"
+										onbeforesave="saveUser($data, user.personId)"
 										ng-show="rowform.$visible" class="form-buttons form-inline"
 										shown="inserted == user">
 										<button type="submit" ng-disabled="rowform.$waiting"
@@ -66,10 +66,26 @@
 											Cancel</button>
 									</form>
 									<div class="buttons" ng-show="!rowform.$visible">
+									
+									
+									<input
+    bs-switch
+    ng-model="user.isSubscribed"
+    switch-label="Subscribe"
+    switch-on-color="success"
+    switch-off-color="danger"
+    switch-on-text ="Yes"
+    switch-off-text ="No"
+    type="checkbox"
+    ng-true-value="true"
+    ng-false-value="false"
+    ng-change="toggle(user.userId)">
+									
+									
 									<a ng-href="#/userHistory/{{user.cardNumber}}"><button class="btn btn-success">User history</button></a>
 										<button class="btn btn-primary" ng-click="rowform.$show()">Edit</button>
 										<button class="btn btn-danger"
-											ng-click="removeUser($index,user.userId)">Delete</button>
+											ng-click="removeUser($index,user.personId)">Delete</button>
 									</div>
 								</td>
 							</tr>

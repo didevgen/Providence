@@ -5,8 +5,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -14,7 +12,7 @@ import org.hibernate.criterion.Restrictions;
 
 import ua.nure.kovaljov.database.dao.TransactionDAO;
 import ua.nure.kovaljov.entity.dbentity.History;
-import ua.nure.kovaljov.entity.dbentity.User;
+import ua.nure.kovaljov.entity.dbentity.Person;
 import ua.nure.kovaljov.model.TransactionModel;
 import ua.nure.kovaljov.utils.HibernateUtil;
 
@@ -45,15 +43,18 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 			session.beginTransaction();
 			for (TransactionModel model : transactions) {
 				SQLQuery insertQuery = session.createSQLQuery(
-						"INSERT INTO transaction(`verify_id`,`door_id`,`event_id`,`inOutState`,`time`,card_id)"
-								+ "VALUES(?,?,?,?,?,?);");
-				insertQuery.setParameter(0, model.getVerifiedId());
-				insertQuery.setParameter(1, model.getDoorId());
-				insertQuery.setParameter(2, model.getEventId());
-				insertQuery.setParameter(3, model.getInOutState());
-				insertQuery.setParameter(4, model.getTime());
-				insertQuery.setLong(5, model.getCardId());
+						"INSERT IGNORE INTO `room` (`room_ip`,`room_name`,`door_state`) VALUES (?,'no name','entrance');");
+				insertQuery.setParameter(0, model.getDoorId());
 				insertQuery.executeUpdate();
+				SQLQuery insertQuery1 = session.createSQLQuery("INSERT INTO transaction (`verify_id`,`room_ip`,`event_id`,`inOutState`,`time`,`card_id`)"
+				+ " VALUES(?,?,?,?,?,?);");
+				insertQuery1.setParameter(0, model.getVerifiedId());
+				insertQuery1.setParameter(1, model.getDoorId());
+				insertQuery1.setParameter(2, model.getEventId());
+				insertQuery1.setParameter(3, model.getInOutState());
+				insertQuery1.setParameter(4, model.getTime());
+				insertQuery1.setLong(5, model.getCardId());
+				insertQuery1.executeUpdate();
 			}
 			session.getTransaction().commit();
 		} catch (Exception e) {
@@ -66,26 +67,26 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 		}
 	}
 
-	private User insertUnregisteredUser(long cardId) {
-		User user = new User();
-		user.setCardNumber(cardId);
-		user.setUserName("Unregistered");
-		user.setEmail("");
-		user = new UserDAOImpl().insertUser(user);
-		return user;
+	private Person insertUnregisteredPerson(long cardId) {
+		Person person = new Person();
+		person.setCardNumber(cardId);
+		person.setPersonName("Unregistered");
+		person.setEmail("");
+		person = new PersonDAOImpl().insertPerson(person);
+		return person;
 	}
 
-	private User getUserByCard(long cardId) {
+	private Person getPersonByCard(long cardId) {
 		Session session = null;
-		User user = null;
+		Person person = null;
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
-			Criteria cr = session.createCriteria(User.class);
+			Criteria cr = session.createCriteria(Person.class);
 			cr.add(Restrictions.eq("cardNumber", cardId));
 			@SuppressWarnings("unchecked")
-			List<User> lst = cr.list();
+			List<Person> lst = cr.list();
 			if (lst.size() == 0) {
-				return insertUnregisteredUser(cardId);
+				return insertUnregisteredPerson(cardId);
 			} else {
 				return lst.get(0);
 			}
@@ -96,13 +97,13 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 				session.close();
 			}
 		}
-		return user;
+		return person;
 	}
 
-	private User getUserByCard(List<User> users, long cardId) {
-		for (User user : users) {
-			if (user.getCardNumber() == cardId) {
-				return user;
+	private Person getPersonByCard(List<Person> persons, long cardId) {
+		for (Person person : persons) {
+			if (person.getCardNumber() == cardId) {
+				return person;
 			}
 		}
 		return null;
@@ -110,14 +111,14 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 
 	@Override
 	public List<History> getAllHistory() {
-		List<User> cardNumbers = new ArrayList<>();
+		List<Person> cardNumbers = new ArrayList<>();
 		List<History> history = new ArrayList<History>();
 		List<History> objects = new ArrayList<>();
 		List<Object> obj = super.getAllObjects(History.class);
 		for (Object o: obj) {
 			objects.add((History)o);
 		}
-		fillWithUsers(objects, cardNumbers, history);
+		fillWithPersons(objects, cardNumbers, history);
 		return history;
 	}
 
@@ -128,7 +129,7 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 		c.setTime(new Date());
 		c.add(Calendar.MONTH, -1);
 		Session session = null;
-		List<User> cardNumbers = new ArrayList<>();
+		List<Person> cardNumbers = new ArrayList<>();
 		List<History> history = new ArrayList<History>();
 		List<History> objects = new ArrayList<History>();
 		try {
@@ -142,7 +143,7 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 				session.close();
 			}
 		}
-		fillWithUsers(objects, cardNumbers, history);
+		fillWithPersons(objects, cardNumbers, history);
 		return history;
 	}
 
@@ -150,7 +151,7 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 	@Override
 	public List<History> getHistoryByCardNumber(long cardNumber) {
 		Session session = null;
-		List<User> cardNumbers = new ArrayList<>();
+		List<Person> cardNumbers = new ArrayList<>();
 		List<History> history = new ArrayList<History>();
 		List<History> objects = new ArrayList<History>();
 		try {
@@ -163,7 +164,7 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 				session.close();
 			}
 		}
-		fillWithUsers(objects, cardNumbers, history);
+		fillWithPersons(objects, cardNumbers, history);
 		return history;
 	}
 
@@ -171,7 +172,7 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 	@Override
 	public List<History> getHistoryGreaterThanDate(Date date) {
 		Session session = null;
-		List<User> cardNumbers = new ArrayList<>();
+		List<Person> cardNumbers = new ArrayList<>();
 		List<History> history = new ArrayList<History>();
 		List<History> objects = new ArrayList<History>();
 		try {
@@ -186,22 +187,22 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 				session.close();
 			}
 		}
-		fillWithUsers(objects, cardNumbers, history);
+		fillWithPersons(objects, cardNumbers, history);
 		return history;
 	}
 
-	private void fillWithUsers(List<History> objects, List<User> cardNumbers, List<History> history) {
+	private void fillWithPersons(List<History> objects, List<Person> cardNumbers, List<History> history) {
 		for (History h : objects) {
 			if (h.getCardId() == 0) {
 				continue;
 			}
-			User user = getUserByCard(cardNumbers, h.getCardId());
-			if (user == null) {
-				user = getUserByCard(h.getCardId());
-				cardNumbers.add(user);
+			Person person = getPersonByCard(cardNumbers, h.getCardId());
+			if (person == null) {
+				person = getPersonByCard(h.getCardId());
+				cardNumbers.add(person);
 			}
-			user.setGroups(null);
-			h.setUser(user);
+			person.setGroups(null);
+			h.setPerson(person);
 			history.add(h);
 		}
 	}

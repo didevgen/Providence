@@ -7,7 +7,7 @@ public class Transaction {
 
 	private int verified;
 
-	private int doorId;
+	private String doorId;
 
 	private int eventType;
 
@@ -20,7 +20,7 @@ public class Transaction {
 	}
 
 	public Transaction(long cardId, int pin, int verified, 
-			int doorId, int eventType, int inOutState, String time) {
+			String doorId, int eventType, int inOutState, String time) {
 		super();
 		this.cardId = cardId;
 		this.pin = pin;
@@ -55,11 +55,11 @@ public class Transaction {
 		this.verified = verified;
 	}
 
-	public int getDoorId() {
+	public String getDoorId() {
 		return doorId;
 	}
 
-	public void setDoorId(int doorId) {
+	public void setDoorId(String doorId) {
 		this.doorId = doorId;
 	}
 
