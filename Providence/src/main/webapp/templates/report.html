@@ -1,10 +1,34 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-REPORT
-</body>
-</html>
+<div class="panel-body" ng-controller="reportController">
+	<div id="custom-search-input">
+		<div class="input-group col-md-4">
+			<input ng-model="searchText" type="text"
+				class="form-control input-md" placeholder="Search" /> <span
+				class="input-group-btn">
+				<button class="btn btn-info btn-md" type="button">
+					<i class="glyphicon glyphicon-search"></i>
+				</button>
+			</span>
+		</div>
+	</div>
+	<div class="col-md-3 " ng-repeat="room in getFilteredRooms()">
+		<div class="alert alert-info text-center headerIcons">
+			<i class="fa fa-empire fa-5x"></i>
+			<h4>{{room.roomName}}</h4>
+			<h5>Present now: {{room.whoIsOnline.length}}</h5>
+			<div class="row"><div class="col-md-12 col-md-offset-0">
+				<a ng-href="#rooms/{{room.roomId}}"><button type="button"
+					class="btn btn-primary btn-group btn-group-justified ">Who
+					is present?</button></a></div>
+				<div class="col-md-12">
+					<a ng-href="#calendar/{{room.roomId}}"><button type="button"
+						class="btn btn-success btn-group btn-group-justified ">Calendar
+						report</button></a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+<uib-pagination total-items="rooms.length" ng-model="currentPage"
+	max-size="itemsPerPage" class="pagination-sm" boundary-links="true"
+	rotate="false"></uib-pagination>

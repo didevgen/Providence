@@ -1,6 +1,8 @@
 package ua.nure.kovaljov.entity.dbentity;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -33,6 +35,7 @@ public class Room {
 	
 	private transient Set<History> history = new HashSet<>();
 	private transient Set<User> subscribers = new HashSet<>();
+	private List<Person> whoIsOnline = new ArrayList<>();
 	
 	public Room() {
 		
@@ -89,11 +92,12 @@ public class Room {
 		this.isSubscribed = isSubscribed;
 	}
 	
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((roomIp == null) ? 0 : roomIp.hashCode());
+		result = prime * result + ((roomName == null) ? 0 : roomName.hashCode());
 		return result;
 	}
 	@Override
@@ -105,10 +109,10 @@ public class Room {
 		if (getClass() != obj.getClass())
 			return false;
 		Room other = (Room) obj;
-		if (roomIp == null) {
-			if (other.roomIp != null)
+		if (roomName == null) {
+			if (other.roomName != null)
 				return false;
-		} else if (!roomIp.equals(other.roomIp))
+		} else if (!roomName.equals(other.roomName))
 			return false;
 		return true;
 	}
@@ -127,6 +131,13 @@ public class Room {
 
 	public void setSubscribers(Set<User> subscribers) {
 		this.subscribers = subscribers;
+	}
+	@Transient
+	public List<Person> getWhoIsOnline() {
+		return whoIsOnline;
+	}
+	public void setWhoIsOnline(List<Person> whoIsOnline) {
+		this.whoIsOnline = whoIsOnline;
 	}
 	
 }

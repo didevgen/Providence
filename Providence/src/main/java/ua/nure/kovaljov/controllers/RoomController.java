@@ -1,7 +1,9 @@
 package ua.nure.kovaljov.controllers;
 
 import java.security.Principal;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import ua.nure.kovaljov.database.dao.impl.UserDAOImpl;
-import ua.nure.kovaljov.entity.dbentity.Person;
 import ua.nure.kovaljov.entity.dbentity.Room;
 import ua.nure.kovaljov.entity.dbentity.User;
 import ua.nure.kovaljov.services.RoomService;
@@ -33,6 +34,17 @@ public class RoomController {
 		}
 		return rooms;
 	}
+	@RequestMapping(value = "/room/users", method = RequestMethod.POST)
+	public Set<Room> getAllRoomsWithCurrent(Principal principal) {
+		List<Room> rooms = service.getRooms();
+		Set<Room> uniqueRooms = new HashSet<>();
+		uniqueRooms.addAll(rooms);
+		for (Room room : uniqueRooms) {
+			room.setWhoIsOnline(service.getOnlineUsers(room.getRoomName()));
+		}
+		return uniqueRooms;
+	}
+	
 	
 	@RequestMapping(value = "/room/update/{id}", method = RequestMethod.POST)
 	public void updateRoom(@PathVariable int id, @RequestBody Room room) {

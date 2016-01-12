@@ -3,12 +3,14 @@ package ua.nure.kovaljov.database.dao.impl;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import ua.nure.kovaljov.database.dao.TransactionDAO;
@@ -157,7 +159,38 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 		fillWithPersons(objects, cardNumbers, history);
 		return history;
 	}
-
+	public List<History> getTodayHistory(String roomName) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(new Date());
+		c.set(Calendar.HOUR_OF_DAY, 0);
+	    c.set(Calendar.MINUTE, 0);
+	    c.set(Calendar.SECOND, 0);
+	    c.set(Calendar.MILLISECOND, 0);
+		Session session = null;
+		List<Person> cardNumbers = new ArrayList<>();
+		List<History> history = new ArrayList<History>();
+		List<History> objects = new ArrayList<History>();
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			objects = session.createCriteria(History.class).add(Restrictions.ge("time", c.getTime()))
+					.add(Restrictions.ne("cardId", 0L)).addOrder(Order.asc("time")).list();
+			Iterator<History> iter = objects.iterator();
+			while(iter.hasNext()) {
+				History object = iter.next();
+				if (!object.getRoom().getRoomName().equalsIgnoreCase(roomName)) {
+					iter.remove();
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
+		}
+		fillWithPersons(objects, cardNumbers, history);
+		return history;
+	}
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<History> getHistoryByCardNumber(long cardNumber) {
