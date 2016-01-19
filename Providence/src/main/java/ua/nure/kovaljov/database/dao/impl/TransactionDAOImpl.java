@@ -52,8 +52,9 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 				room.setRoomIp(model.getDoorId());
 				room.setRoomName("no name");
 				Room r = new RoomDAOImpl().insertRoom(room);
-				SQLQuery insertQuery1 = session.createSQLQuery("INSERT INTO transaction (`verify_id`,`room_id`,`event_id`,`inOutState`,`time`,`card_id`)"
-				+ " VALUES(?,?,?,?,?,?);");
+				SQLQuery insertQuery1 = session.createSQLQuery(
+						"INSERT INTO transaction (`verify_id`,`room_id`,`event_id`,`inOutState`,`time`,`card_id`)"
+								+ " VALUES(?,?,?,?,?,?);");
 				insertQuery1.setParameter(0, model.getVerifiedId());
 				insertQuery1.setParameter(1, r.getRoomId());
 				insertQuery1.setParameter(2, model.getEventId());
@@ -102,7 +103,7 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 			} else {
 				return lst.get(0);
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -128,8 +129,8 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 		List<History> history = new ArrayList<History>();
 		List<History> objects = new ArrayList<>();
 		List<Object> obj = super.getAllObjects(History.class);
-		for (Object o: obj) {
-			objects.add((History)o);
+		for (Object o : obj) {
+			objects.add((History) o);
 		}
 		fillWithPersons(objects, cardNumbers, history);
 		return history;
@@ -159,13 +160,14 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 		fillWithPersons(objects, cardNumbers, history);
 		return history;
 	}
+
 	public List<History> getTodayHistory(String roomName) {
 		Calendar c = Calendar.getInstance();
 		c.setTime(new Date());
 		c.set(Calendar.HOUR_OF_DAY, 0);
-	    c.set(Calendar.MINUTE, 0);
-	    c.set(Calendar.SECOND, 0);
-	    c.set(Calendar.MILLISECOND, 0);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
 		Session session = null;
 		List<Person> cardNumbers = new ArrayList<>();
 		List<History> history = new ArrayList<History>();
@@ -175,7 +177,7 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 			objects = session.createCriteria(History.class).add(Restrictions.ge("time", c.getTime()))
 					.add(Restrictions.ne("cardId", 0L)).addOrder(Order.asc("time")).list();
 			Iterator<History> iter = objects.iterator();
-			while(iter.hasNext()) {
+			while (iter.hasNext()) {
 				History object = iter.next();
 				if (!object.getRoom().getRoomName().equalsIgnoreCase(roomName)) {
 					iter.remove();
@@ -191,6 +193,7 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 		fillWithPersons(objects, cardNumbers, history);
 		return history;
 	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<History> getHistoryByCardNumber(long cardNumber) {
@@ -200,7 +203,8 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 		List<History> objects = new ArrayList<History>();
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
-			objects = session.createCriteria(History.class).add(Restrictions.eq("cardId", cardNumber)).addOrder(Order.asc("time")).list();
+			objects = session.createCriteria(History.class).add(Restrictions.eq("cardId", cardNumber))
+					.addOrder(Order.asc("time")).list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -223,13 +227,13 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			objects = session.createCriteria(History.class).add(Restrictions.ge("time", date))
 					.add(Restrictions.ne("cardId", 0L)).list();
-			for (History h: history) {
+			for (History h : history) {
 				Hibernate.initialize(h.getRoom());
 				Hibernate.initialize(h.getRoom().getSubscribers());
 			}
-			
+
 		} catch (Exception e) {
-			 e.printStackTrace();
+			e.printStackTrace();
 		} finally {
 			if (session != null && session.isOpen()) {
 				session.close();
@@ -262,7 +266,31 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 		List<History> objects = new ArrayList<History>();
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
-			objects = session.createCriteria(History.class).add(Restrictions.eq("room.roomId", roomId)).addOrder(Order.asc("time")).list();
+			objects = session.createCriteria(History.class).add(Restrictions.eq("room.roomId", roomId))
+					.addOrder(Order.asc("time")).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
+		}
+		fillWithPersons(objects, cardNumbers, history);
+		return history;
+	}
+
+	public List<History> getHistoryByRoomName(String roomName) {
+		List<Room> appliableRooms = new RoomDAOImpl().getRoomByName(roomName);
+		Session session = null;
+		List<Person> cardNumbers = new ArrayList<>();
+		List<History> history = new ArrayList<History>();
+		List<History> objects = new ArrayList<History>();
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			for (Room room : appliableRooms) {
+				objects.addAll(session.createCriteria(History.class).add(Restrictions.eq("room.roomId", room.getRoomId()))
+						.addOrder(Order.asc("time")).list());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

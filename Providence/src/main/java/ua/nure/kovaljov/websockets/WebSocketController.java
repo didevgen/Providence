@@ -25,7 +25,6 @@ public class WebSocketController {
 		try {
 			addSession(session);
 			if (!WSContainer.desktopSessions.isEmpty()) {
-				System.out.println("send message");
 				session.getBasicRemote().sendText("connected");
 			}
 		} catch (Exception ex) {

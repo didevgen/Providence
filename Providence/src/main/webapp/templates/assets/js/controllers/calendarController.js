@@ -1,10 +1,12 @@
 app.controller('calendarController', function($scope, $http, $routeParams,$compile,uiCalendarConfig) {
-	$scope.roomId = JSON.parse($routeParams.roomId);
-	var date = new Date();
+	$scope.roomName = $routeParams.roomName;
+    $scope.sessions = [];
+    var date = new Date();
     var d = date.getDate();
     var m = date.getMonth();
     var y = date.getFullYear();
     
+    $scope.changeTo = 'Hungarian';
     /* event source that pulls from google.com */
     $scope.eventSource = {
             url: "http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic",
@@ -13,20 +15,6 @@ app.controller('calendarController', function($scope, $http, $routeParams,$compi
     };
     /* event source that contains custom events on the scope */
     $scope.events = [
-      {title: 'All Day Event',start: new Date(y, m, 1)},
-      {title: 'All Day Event',start: new Date(y, m, 1)},
-      {title: 'All Day Event',start: new Date(y, m, 1)},
-      {title: 'All Day Event',start: new Date(y, m, 1)},
-      {title: 'All Day Event',start: new Date(y, m, 1)},
-      {title: 'All Day Event',start: new Date(y, m, 1)},
-      {title: 'All Day Event',start: new Date(y, m, 1)},
-      {title: 'All Day Event',start: new Date(y, m, 1)},
-      {title: 'All Day Event',start: new Date(y, m, 1)},
-      {title: 'Long Event',start: new Date(y, m, d - 5),end: new Date(y, m, d - 2)},
-      {id: 999,title: 'Repeating Event',start: new Date(y, m, d - 3, 16, 0),allDay: false},
-      {id: 999,title: 'Repeating Event',start: new Date(y, m, d + 4, 16, 0),allDay: false},
-      {title: 'Birthday Party',start: new Date(y, m, d + 1, 19, 0),end: new Date(y, m, d + 1, 22, 30),allDay: false},
-      {title: 'Click for Google',start: new Date(y, m, 28),end: new Date(y, m, 29),url: 'http://google.com/'}
     ];
     /* event source that calls a function on every view switch */
     $scope.eventsF = function (start, end, timezone, callback) {
@@ -100,7 +88,21 @@ app.controller('calendarController', function($scope, $http, $routeParams,$compi
                      'tooltip-append-to-body': true});
         $compile(element)($scope);
     };
-    /* config object */
+
+    $scope.changeLang = function() {
+      if($scope.changeTo === 'Hungarian'){
+        $scope.uiConfig.calendar.dayNames = ["Vasárnap", "Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat"];
+        $scope.uiConfig.calendar.dayNamesShort = ["Vas", "Hét", "Kedd", "Sze", "Csüt", "Pén", "Szo"];
+        $scope.changeTo= 'English';
+      } else {
+        $scope.uiConfig.calendar.dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        $scope.uiConfig.calendar.dayNamesShort = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        $scope.changeTo = 'Hungarian';
+      }
+    };
+    /* event sources array*/
+    $scope.eventSources = [$scope.events, $scope.eventSource, $scope.eventsF];
+    $scope.eventSources2 = [$scope.calEventsExt, $scope.eventsF, $scope.events];
     $scope.uiConfig = {
       calendar:{
         height: 850,
@@ -125,14 +127,43 @@ app.controller('calendarController', function($scope, $http, $routeParams,$compi
             	eventLimit: 6
             }
         },
-        eventClick: $scope.alertOnEventClick,
-        eventDrop: $scope.alertOnDrop,
-        eventResize: $scope.alertOnResize,
-        eventRender: $scope.eventRender
       }
     };
+    getRoomHistory();
+    function getRoomHistory() {
+		var myFunc = function (data) {
+            var resp = data.data;
+            console.log(resp);
+            $scope.sessions = data.data;
+            $scope.sessions.forEach(function(item, i,object){
+            	var object = {};
+            	object.title = item.person.personName;
+            	object.start = moment(item.startDate);
+            	object.end = moment(item.finishDate);
+            	console.log(object);
+            });
+            $scope.sessions.forEach(function(item, i,object){
+            	var object = {};
+            	object.title = item.person.personName;
+            	object.start = moment(item.startDate);
+            	object.end = moment(item.finishDate);
+            	$scope.events.push(object);
+            });
+        }
+        sendRequest("/kovaljov/transaction/room/"+$scope.roomName, {}, myFunc)
+	}
+    function sendRequest(urlPattern, dataObj, myFunc) {
+        $http({
+            method: 'POST',
+            url: urlPattern,
+            data: dataObj,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(function successCallback(response) {
+            myFunc(response);
+        }, function errorCallback(response) {
 
-    /* event sources array*/
-    $scope.eventSources = [$scope.events, $scope.eventSource, $scope.eventsF];
-    $scope.eventSources2 = [$scope.calEventsExt, $scope.eventsF, $scope.events];
+        });
+    }
 });

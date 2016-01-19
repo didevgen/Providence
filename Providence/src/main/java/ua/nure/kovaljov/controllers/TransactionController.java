@@ -48,9 +48,9 @@ public class TransactionController {
 		return history;
 	}
 	
-	@RequestMapping(value = "/transaction/room/{roomId}", method = RequestMethod.POST)
-	public List<UserSession> getRoomHistory(@PathVariable int roomId) {
-		List<UserSession> history = new TransactionService().getRoomHistory(roomId);
+	@RequestMapping(value = "/transaction/room/{roomName}", method = RequestMethod.POST)
+	public List<UserSession> getRoomHistory(@PathVariable String roomName) {
+		List<UserSession> history = new TransactionService().getRoomHistory(roomName);
 		return history;
 	}
 }

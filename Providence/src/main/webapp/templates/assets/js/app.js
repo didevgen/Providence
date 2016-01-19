@@ -35,7 +35,7 @@ app
 				controller : "presenceController",
 				templateUrl : "../templates/present.html"
 			});
-			$routeProvider.when("/calendar/:roomId", {
+			$routeProvider.when("/calendar/:roomName", {
 				controller : "calendarController",
 				templateUrl : "../templates/calendar.html"
 			});

@@ -62,7 +62,22 @@ public class RoomDAOImpl extends BaseCRUD implements RoomDAO {
 			}
 		}
 	}
-
+	public List<Room> getRoomByName(String name) {
+		Session session = null;
+		Room room = new Room();
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			List rooms = session.createCriteria(Room.class).add(Restrictions.eq("roomName", name)).list();
+			return rooms;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
+		}
+		return null;
+	}
 	public Room getRoomByIp(String ip) {
 		Session session = null;
 		Room room = new Room();
