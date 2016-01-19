@@ -11,6 +11,9 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.google.gson.Gson;
 
 import ua.nure.kovaljov.entity.Transaction;
@@ -24,7 +27,8 @@ import ua.nure.kovaljov.websockets.service.WSBridge;
 
 @ServerEndpoint(value = "/desktop")
 public class DesktopController {
-
+	private Logger log = LogManager.getLogger(DesktopController.class);
+	
 	public void addSession(Session session) {
 		WSContainer.desktopSessions.add(session);
 	}
@@ -37,6 +41,7 @@ public class DesktopController {
 	public void start(Session session) {
 		try {
 			addSession(session);
+			new WSBridge().transferToClient("connected");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -71,7 +76,10 @@ public class DesktopController {
 
 	@OnError
 	public void onError(Throwable t, Session session) throws Throwable {
-		t.printStackTrace();
+		log.error(t.getMessage());
+		WSContainer.desktopSessions.clear();
+		new WSBridge().transferToClient("disconnected");
+		WSContainer.webSessions.clear();
 	}
 
 	

@@ -24,6 +24,10 @@ public class WebSocketController {
 	public void start(Session session) {
 		try {
 			addSession(session);
+			if (!WSContainer.desktopSessions.isEmpty()) {
+				System.out.println("send message");
+				session.getBasicRemote().sendText("connected");
+			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -40,6 +44,7 @@ public class WebSocketController {
 
 	@OnError
 	public void onError(Throwable t, Session session) throws Throwable {
+		WSContainer.webSessions.remove(session);
 	}
 
 	
