@@ -148,7 +148,7 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			objects = session.createCriteria(History.class).add(Restrictions.ge("time", c.getTime()))
-					.add(Restrictions.ne("cardId", 0L)).list();
+					.add(Restrictions.ne("cardId", 0L)).addOrder(Order.asc("time")).list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -200,7 +200,7 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 		List<History> objects = new ArrayList<History>();
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
-			objects = session.createCriteria(History.class).add(Restrictions.eq("cardId", cardNumber)).list();
+			objects = session.createCriteria(History.class).add(Restrictions.eq("cardId", cardNumber)).addOrder(Order.asc("time")).list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -223,6 +223,10 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			objects = session.createCriteria(History.class).add(Restrictions.ge("time", date))
 					.add(Restrictions.ne("cardId", 0L)).list();
+			for (History h: history) {
+				Hibernate.initialize(h.getRoom());
+				Hibernate.initialize(h.getRoom().getSubscribers());
+			}
 			
 		} catch (Exception e) {
 			 e.printStackTrace();
@@ -249,5 +253,24 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 			h.setPerson(person);
 			history.add(h);
 		}
+	}
+
+	public List<History> getHistoryByRoomNumber(int roomId) {
+		Session session = null;
+		List<Person> cardNumbers = new ArrayList<>();
+		List<History> history = new ArrayList<History>();
+		List<History> objects = new ArrayList<History>();
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			objects = session.createCriteria(History.class).add(Restrictions.eq("room.roomId", roomId)).addOrder(Order.asc("time")).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
+		}
+		fillWithPersons(objects, cardNumbers, history);
+		return history;
 	}
 }

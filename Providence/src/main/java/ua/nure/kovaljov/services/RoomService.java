@@ -46,7 +46,15 @@ public class RoomService {
 		Set<Person> present = new HashSet<>();
 		for(History h:hList) {
 			if (h.getRoom().getDoorState().equalsIgnoreCase("entrance")) {
-				present.add(h.getPerson());
+				Person person = h.getPerson();
+				if (present.contains(person)) {
+					present.remove(person);
+					person.setLastAction(h.getTime());
+					present.add(person);
+					continue;
+				}
+				person.setLastAction(h.getTime());
+				present.add(person);
 			} else if (h.getRoom().getDoorState().equalsIgnoreCase("exit")) {
 				present.remove(h.getPerson());
 			}

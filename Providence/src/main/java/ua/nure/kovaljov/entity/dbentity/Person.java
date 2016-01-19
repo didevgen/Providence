@@ -1,5 +1,6 @@
 package ua.nure.kovaljov.entity.dbentity;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,7 +27,7 @@ public class Person {
 	private long cardNumber;
 	private String email;
 	private boolean isSubscribed;
-	
+	private Date lastAction;
 
 	private Set<Group> groups = new HashSet<Group>();
 	private Set<User> subscribers = new HashSet<>();
@@ -107,6 +108,14 @@ public class Person {
 
 	public void setSubscribed(boolean isSubscribed) {
 		this.isSubscribed = isSubscribed;
+	}
+	@Transient
+	public Date getLastAction() {
+		return lastAction;
+	}
+
+	public void setLastAction(Date lastAction) {
+		this.lastAction = lastAction;
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-var app = angular.module('Providence', [ 'ngRoute', 'xeditable',
+var app = angular.module('Providence', [ 'ngRoute', 'xeditable','ui.calendar',
 		'ui.bootstrap', 'frapontillo.bootstrap-switch' ]);
 app
 		.config(function($routeProvider, $httpProvider) {
@@ -30,6 +30,14 @@ app
 			$routeProvider.when("/report", {
 				controller : "reportController",
 				templateUrl : "../templates/report.html"
+			});
+			$routeProvider.when("/rooms/:roomId", {
+				controller : "presenceController",
+				templateUrl : "../templates/present.html"
+			});
+			$routeProvider.when("/calendar/:roomId", {
+				controller : "calendarController",
+				templateUrl : "../templates/calendar.html"
 			});
 			$routeProvider.otherwise({
 				redirectTo : '/history'

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import ua.nure.kovaljov.entity.dbentity.History;
+import ua.nure.kovaljov.entity.dbentity.UserSession;
 import ua.nure.kovaljov.services.TransactionService;
 
 @RestController
@@ -44,6 +45,12 @@ public class TransactionController {
 	public List<History> getUserHistory(@PathVariable long cardNumber) {
 		log.entry(cardNumber);
 		List<History> history = new TransactionService().getUserHistory(cardNumber);
+		return history;
+	}
+	
+	@RequestMapping(value = "/transaction/room/{roomId}", method = RequestMethod.POST)
+	public List<UserSession> getRoomHistory(@PathVariable int roomId) {
+		List<UserSession> history = new TransactionService().getRoomHistory(roomId);
 		return history;
 	}
 }

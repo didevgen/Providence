@@ -27,11 +27,11 @@
 					</thead>
 					<tbody>
 						<tr class="success" ng-repeat="x in getLastTenItems()">
-							<td>{{ x.user.userName }}</td>
+							<td>{{ x.person.personName }}</td>
 							<td>{{ x.cardId }}</td>
 							<td>{{ formatTime(x.time) }}</td>
 							<td>{{ x.eventType.eventDescription }}</td>
-							<td>{{ x.doorId }}</td>
+							<td>{{ x.room.roomName }}</td>
 							<td>{{ x.verifyMode.modeDescription }}</td>
 						</tr>
 					</tbody>

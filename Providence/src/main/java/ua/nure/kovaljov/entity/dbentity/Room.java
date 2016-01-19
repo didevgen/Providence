@@ -121,7 +121,7 @@ public class Room {
 		return "Room [roomName=" + roomName + ", doorState=" + doorState + "]";
 	}
 	@JsonIgnore
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "s_user_to_room", joinColumns = {
 			@JoinColumn(name = "room_id", nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "id", nullable = false, updatable = false) })
