@@ -31,7 +31,7 @@ public class TransactionModel {
 		this.doorId = doorId;
 		this.verifiedId = verifCode;
 		this.inOutState = inOutState;
-		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 		try {
 			this.time = sdf.parse(time);
 		} catch (ParseException e) {

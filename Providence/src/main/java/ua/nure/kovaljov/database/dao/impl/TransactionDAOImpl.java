@@ -254,8 +254,10 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 				cardNumbers.add(person);
 			}
 			person.setGroups(null);
-			h.setPerson(person);
-			history.add(h);
+			if (!person.getPersonName().equals("Unregistered")) {
+				h.setPerson(person);
+				history.add(h);
+			}
 		}
 	}
 
@@ -288,8 +290,8 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			for (Room room : appliableRooms) {
-				objects.addAll(session.createCriteria(History.class).add(Restrictions.eq("room.roomId", room.getRoomId()))
-						.addOrder(Order.asc("time")).list());
+				objects.addAll(session.createCriteria(History.class)
+						.add(Restrictions.eq("room.roomId", room.getRoomId())).addOrder(Order.asc("time")).list());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -57,7 +57,7 @@ public class DesktopController {
 		if (message.equals("getLastDate")) {
 			Date date  = new TransactionService().getLastDate();
 			if (date == null) {
-				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				WSContainer.sendToAllDesktopConnectedSessions(format.format(new Date(0L)));
 				return;
 			}
