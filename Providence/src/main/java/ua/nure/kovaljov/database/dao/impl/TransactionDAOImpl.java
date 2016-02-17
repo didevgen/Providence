@@ -99,7 +99,10 @@ public class TransactionDAOImpl extends BaseCRUD implements TransactionDAO {
 				}
 			}
 			if (lst.size() == 0) {
-				return insertUnregisteredPerson(cardId);
+				session.clear();
+				if (new PersonDAOImpl().getPersonByCardNumber(cardId) == null) {
+					return insertUnregisteredPerson(cardId);
+				}
 			} else {
 				return lst.get(0);
 			}

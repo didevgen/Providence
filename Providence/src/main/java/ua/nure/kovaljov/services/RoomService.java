@@ -45,7 +45,10 @@ public class RoomService {
 	private Set<Person> getPresentUsers(List<History> hList) {
 		Set<Person> present = new HashSet<>();
 		for(History h:hList) {
-			if (h.getRoom().getDoorState().equalsIgnoreCase("entrance")) {
+			if (h.getRoom().getDoorState().equalsIgnoreCase("entrance") 
+					&& (h.getEventType().getEventTypeId()!=27 //The card is not registered id
+					|| !(h.getEventType().getEventDesription()
+							.equals("The card is not registered")))) {
 				Person person = h.getPerson();
 				if (present.contains(person)) {
 					present.remove(person);
