@@ -42,6 +42,8 @@
             return $http.delete('/api/users/' + id).then(handleSuccess, handleError('Error deleting user'));
         }
 
+        // private functions
+
         function handleSuccess(res) {
             return res.data;
         }
