@@ -6,7 +6,7 @@ import views.html.landing;
 
 public class LandingController extends Controller {
 
-    public Result landing() {
+    public  Result landing() {
         return ok(landing.render());
     }
 
