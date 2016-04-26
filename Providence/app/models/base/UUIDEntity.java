@@ -10,8 +10,7 @@ public abstract class UUIDEntity implements Serializable {
 
     private static final long serialVersionUID = 2838583836051699523L;
 
-    @Column(unique = true, nullable = false)//, columnDefinition = "uuid")
-//    @org.hibernate.annotations.Type(type = "persistence.types.UUIDType")
+    @Column(unique = true, nullable = false)
     protected String uuid = UUID.randomUUID().toString();
 
     public String getUuid() {

@@ -13,7 +13,6 @@ public abstract class IndexEntity extends UUIDEntity {
     @Basic(optional = false)
     @Column(name = "id", nullable = false, columnDefinition = "INT(11)")
     @GeneratedValue(strategy = GenerationType.AUTO)
-//    @NotNull
     private Long id;
 
 

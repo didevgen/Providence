@@ -1,18 +1,18 @@
-package services;
+package services.token;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import controllers.auth.TokenIdentity;
-import controllers.auth.TokenImpl;
+import com.mysema.query.jpa.impl.JPADeleteClause;
+import models.auth.QTokenImpl;
+import models.auth.TokenIdentity;
+import models.auth.TokenImpl;
 import play.libs.F;
+import services.base.DB;
 
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Created by Smeyan on 04.12.2015.
- */
 public class TokenService {
 
     protected final static transient Logger logger = Logger.getLogger(TokenService.class.getName());
@@ -51,8 +51,7 @@ public class TokenService {
         try {
             String user = objectMapper.writeValueAsString(token.getUser());
             token.setUserAsString(user);
-            String tokenAsString = objectMapper.writeValueAsString(token);
-//            RedisService.getInstance().set(token.getKey(), tokenAsString);
+            DB.save(token);
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage());
         }
@@ -68,13 +67,14 @@ public class TokenService {
             logger.log(Level.SEVERE, throwable.getMessage(), throwable);
         }
     }
-
+    private TokenImpl getToken(String key) {
+        return DB.query().from(QTokenImpl.tokenImpl)
+                .where(QTokenImpl.tokenImpl.key.eq(key))
+                .singleResult(QTokenImpl.tokenImpl);
+    }
     public TokenImpl find(String key) {
-//        String tokenStr = RedisService.getInstance().get(key);
-        String tokenStr = "";
-
-        TokenImpl token = null;
-        if (tokenStr != null && !tokenStr.isEmpty()) {
+        TokenImpl token = getToken(key);
+        if (token != null) {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.setVisibilityChecker(objectMapper.getSerializationConfig()
                     .getDefaultVisibilityChecker()
@@ -82,9 +82,7 @@ public class TokenService {
                     .withGetterVisibility(JsonAutoDetect.Visibility.NONE)
                     .withSetterVisibility(JsonAutoDetect.Visibility.NONE)
                     .withCreatorVisibility(JsonAutoDetect.Visibility.NONE));
-
             try {
-                token = objectMapper.readValue(tokenStr, TokenImpl.class);
                 TokenIdentity userInfo = objectMapper
                         .readValue(token.getUserAsString(),
                                 TokenIdentity.class);
@@ -100,7 +98,10 @@ public class TokenService {
         if (token == null) {
             return;
         }
-//        RedisService.getInstance().del(token.getKey());
+        delete(token.getUuid());
     }
-
+    private void delete(String uuid) {
+        new JPADeleteClause(DB.getEM(), QTokenImpl.tokenImpl)
+                .where(QTokenImpl.tokenImpl.uuid.eq(uuid)).execute();
+    }
 }

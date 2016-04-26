@@ -4,7 +4,7 @@
 
 # An example controller showing a sample home page
 #Authentication controllers
-POST    /users/login                @controllers.auth.AuthenticationController.loginUser()
+GET    /users/login                @controllers.auth.AuthenticationController.loginUser()
 
 #Landing Controller
 

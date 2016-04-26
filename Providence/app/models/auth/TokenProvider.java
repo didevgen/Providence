@@ -1,16 +1,15 @@
-package controllers.auth;
+package models.auth;
 
 import models.user.User;
-import services.TokenService;
+import org.joda.time.DateTime;
+import services.token.TokenService;
 import utils.CryptoHelper;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.Random;
 
 public class TokenProvider {
 
-    private static final long EXPIRE_TIME = 10;
+    private static final int EXPIRE_TIME = 10;
     private static final Random RANDOM = new Random();
 
 
@@ -22,8 +21,8 @@ public class TokenProvider {
         TokenImpl token = new TokenImpl();
         TokenIdentity tokenIdentity = TokenIdentity.from(user);
         token.setKey(CryptoHelper.getDefaultToken());
-//        token.setExpired(DH.nowWithDays(expire));
-//        token.setUpdated(DH.now());
+        token.setExpired(new DateTime().plusDays(EXPIRE_TIME));
+        token.setUpdated(DateTime.now());
         token.setUser(tokenIdentity);
         return token;
     }
@@ -32,9 +31,9 @@ public class TokenProvider {
         if (token == null || token.getUser() == null) {
             return false;
         }
-//        if (!DH.now().before(token.getExpired())) {
-//            return false;
-//        }
+        if (!DateTime.now().isBefore(token.getExpired())) {
+            return false;
+        }
         return true;
     }
 
