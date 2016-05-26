@@ -1,21 +1,16 @@
 package rest;
 
-import commons.helpers.StaticValidationHelper;
-import enums.ErrorType;
-import helpers.JsonHelper;
 import interfaces.IError;
 import play.Logger;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
-import utils.Config;
 
 import java.util.Collection;
 
 public class ResponseHelper {
 
     private static final String DEFAULT_USER_MESSAGE = "Unhandled  exception.";
-
 
     public static Result internalServerError(Throwable e) {
         return internalServerError(e, e.getMessage());
@@ -25,14 +20,10 @@ public class ResponseHelper {
         Logger.error("Throwable response", e);
 
         String developerInfo = null;
-        String[] values = Http.Context.current().request().headers().get(Config.Headers.DEV_USAGE_HEADER_KEY);
+        String[] values = Http.Context.current().request().headers().get("User-Agent");
         if (values != null && values.length == 1 &&
                 (values[0].equalsIgnoreCase("true") || values[0].equalsIgnoreCase("1"))) {
             developerInfo = ErrorMessageHelper.getExceptionDetails(e);
-        }
-
-        if (StaticValidationHelper.isNullOrEmpty(message)) {
-            message = DEFAULT_USER_MESSAGE;
         }
 
         MetadataWrapper metadata = new MetadataWrapper(
@@ -53,7 +44,7 @@ public class ResponseHelper {
     }
 
     public static Result ok() {
-        return status(Http.Status.OK, ErrorType.SUCCESS);
+        return status(Http.Status.OK, "ok");
     }
 
     public static Result ok(Object content) {
@@ -77,7 +68,7 @@ public class ResponseHelper {
     }
 
     public static Result notFound() {
-        return status(Http.Status.NOT_FOUND, ErrorType.ENTITY_NOT_FOUND);
+        return status(Http.Status.NOT_FOUND, "Entity not found");
     }
 
     public static Result forbidden() {
@@ -85,11 +76,11 @@ public class ResponseHelper {
     }
 
     public static Result unauthorized() {
-        return status(Http.Status.UNAUTHORIZED, ErrorType.UNAUTHORIZED);
+        return status(Http.Status.UNAUTHORIZED, "Unauthorized");
     }
 
     public static Result noContent() {
-        return status(Http.Status.NO_CONTENT, ErrorType.NO_CONTENT);
+        return status(Http.Status.NO_CONTENT, "No content");
     }
 
     public static Result badRequest(String errorMessage) {
@@ -108,10 +99,6 @@ public class ResponseHelper {
     public static Result status(int statusCode, Integer subStatus, String message) {
         MetadataWrapper metadata = new MetadataWrapper(statusCode, subStatus, message);
         return getResult(new ResponseWrapper(metadata));
-    }
-
-    public static Result status(int statusCode, ErrorType errorType) {
-        return status(statusCode, null, errorType.getCode(), null);
     }
 
     public static Result result(IError restError) {

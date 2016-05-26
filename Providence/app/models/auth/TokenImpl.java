@@ -27,6 +27,7 @@ public class TokenImpl extends IndexEntity implements IToken {
     @Column(name ="string_user")
     private String userAsString;
 
+
     @Override
     public String getKey() {
         return key;

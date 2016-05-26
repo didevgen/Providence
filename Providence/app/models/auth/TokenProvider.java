@@ -10,9 +10,6 @@ import java.util.Random;
 public class TokenProvider {
 
     private static final int EXPIRE_TIME = 10;
-    private static final Random RANDOM = new Random();
-
-
     public static TokenImpl generate(User user) {
         return generate(user, EXPIRE_TIME);
     }
