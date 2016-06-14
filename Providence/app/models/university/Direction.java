@@ -2,19 +2,15 @@ package models.university;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import models.base.IndexEntity;
 import models.base.UUIDEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Eugne on 26.05.2016.
- */
 @Entity
-@Table(name="department")
-public class Department extends UUIDEntity{
+@Table(name="direction")
+public class Direction extends UUIDEntity{
 
     @Id
     @JsonIgnore
@@ -39,11 +35,20 @@ public class Department extends UUIDEntity{
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Faculty faculty;
 
-    @JsonProperty("teachers")
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "department")
-    private List<Teacher> teachers = new ArrayList<>();
+    @JsonProperty("specialities")
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "direction")
+    private List<Speciality> specialities = new ArrayList<>();
 
-    public Department() {
+    @JsonProperty("groups")
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "direction")
+    private List<Group> groups = new ArrayList<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -54,14 +59,6 @@ public class Department extends UUIDEntity{
         this.name = name;
     }
 
-    public Faculty getFaculty() {
-        return faculty;
-    }
-
-    public void setFaculty(Faculty faculty) {
-        this.faculty = faculty;
-    }
-
     public String getFullName() {
         return fullName;
     }
@@ -70,20 +67,20 @@ public class Department extends UUIDEntity{
         this.fullName = fullName;
     }
 
-    public Long getId() {
-        return id;
+    public Faculty getFaculty() {
+        return faculty;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setFaculty(Faculty faculty) {
+        this.faculty = faculty;
     }
 
-    public List<Teacher> getTeachers() {
-        return teachers;
+    public List<Speciality> getSpecialities() {
+        return specialities;
     }
 
-    public void setTeachers(List<Teacher> teachers) {
-        this.teachers = teachers;
+    public void setSpecialities(List<Speciality> specialities) {
+        this.specialities = specialities;
     }
 
     public Long getApiId() {
@@ -94,5 +91,11 @@ public class Department extends UUIDEntity{
         this.apiId = apiId;
     }
 
+    public List<Group> getGroups() {
+        return groups;
+    }
 
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
+    }
 }

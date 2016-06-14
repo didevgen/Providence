@@ -1,6 +1,7 @@
 package models.university;
 
 import models.base.IndexEntity;
+import models.base.UUIDEntity;
 import models.history.Transaction;
 
 import javax.persistence.*;
@@ -11,7 +12,13 @@ import java.util.List;
  */
 @Entity
 @Table(name = "auditory")
-public class Auditory extends IndexEntity {
+public class Auditory extends UUIDEntity {
+
+    @Id
+    @Basic(optional = false)
+    @Column(name = "id", nullable = false, columnDefinition = "INT(11)")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @Column(name = "name")
     private String name;
@@ -47,5 +54,13 @@ public class Auditory extends IndexEntity {
 
     public void setTransactionList(List<Transaction> transactionList) {
         this.transactionList = transactionList;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

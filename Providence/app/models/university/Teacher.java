@@ -6,15 +6,10 @@ import models.base.IndexEntity;
 import models.base.UUIDEntity;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
-/**
- * Created by Eugne on 26.05.2016.
- */
 @Entity
-@Table(name="department")
-public class Department extends UUIDEntity{
+@Table(name="teachers")
+public class Teacher extends UUIDEntity{
 
     @Id
     @JsonIgnore
@@ -36,38 +31,10 @@ public class Department extends UUIDEntity{
     private String fullName;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private Faculty faculty;
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private Department department;
 
-    @JsonProperty("teachers")
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "department")
-    private List<Teacher> teachers = new ArrayList<>();
-
-    public Department() {
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Faculty getFaculty() {
-        return faculty;
-    }
-
-    public void setFaculty(Faculty faculty) {
-        this.faculty = faculty;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public Teacher() {
     }
 
     public Long getId() {
@@ -78,12 +45,20 @@ public class Department extends UUIDEntity{
         this.id = id;
     }
 
-    public List<Teacher> getTeachers() {
-        return teachers;
+    public String getName() {
+        return name;
     }
 
-    public void setTeachers(List<Teacher> teachers) {
-        this.teachers = teachers;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public Long getApiId() {
@@ -94,5 +69,11 @@ public class Department extends UUIDEntity{
         this.apiId = apiId;
     }
 
+    public Department getDepartment() {
+        return department;
+    }
 
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
 }

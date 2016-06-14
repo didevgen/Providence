@@ -3,9 +3,9 @@ package models.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import models.base.IndexEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name ="user")
@@ -17,6 +17,9 @@ public class User extends IndexEntity {
     @JsonIgnore
     @Column(name ="password")
     private String password;
+
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Token> tokens = new ArrayList<>();
 
     public User() {
     }
@@ -35,5 +38,13 @@ public class User extends IndexEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Token> getTokens() {
+        return tokens;
+    }
+
+    public void setTokens(List<Token> tokens) {
+        this.tokens = tokens;
     }
 }

@@ -3,18 +3,17 @@ package models.history;
 import models.base.IndexEntity;
 import models.university.Auditory;
 import models.university.Person;
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 
 import javax.persistence.*;
 
-/**
- * Created by Eugne on 26.05.2016.
- */
 
 @Entity
 @Table(name="transaction")
 public class Transaction extends IndexEntity{
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Person person;
 
     @Column(name="pin")
@@ -23,7 +22,7 @@ public class Transaction extends IndexEntity{
     @Column(name="verified")
     private int verified;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Auditory auditory;
 
     @Column(name="eventType")
@@ -33,7 +32,8 @@ public class Transaction extends IndexEntity{
     private int inOutState;
 
     @Column(name="time")
-    private String timeString;
+    @Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
+    private DateTime time;
 
     public Transaction() {
     }
@@ -86,12 +86,11 @@ public class Transaction extends IndexEntity{
         this.inOutState = inOutState;
     }
 
-    public String getTimeString() {
-        return timeString;
+    public DateTime getTime() {
+        return time;
     }
 
-    public void setTimeString(String timeString) {
-        this.timeString = timeString;
+    public void setTime(DateTime time) {
+        this.time = time;
     }
-
 }

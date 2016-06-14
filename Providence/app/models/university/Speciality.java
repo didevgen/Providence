@@ -2,7 +2,6 @@ package models.university;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import models.base.IndexEntity;
 import models.base.UUIDEntity;
 
 import javax.persistence.*;
@@ -10,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Eugne on 26.05.2016.
+ * Created by Eugne on 28.05.2016.
  */
 @Entity
-@Table(name="department")
-public class Department extends UUIDEntity{
+@Table(name = "speciality")
+public class Speciality extends UUIDEntity {
 
     @Id
     @JsonIgnore
@@ -37,13 +36,18 @@ public class Department extends UUIDEntity{
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private Faculty faculty;
+    private Direction direction;
 
-    @JsonProperty("teachers")
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "department")
-    private List<Teacher> teachers = new ArrayList<>();
+    @JsonProperty("groups")
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "speciality")
+    private List<Group> groups = new ArrayList<>();
 
-    public Department() {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -54,14 +58,6 @@ public class Department extends UUIDEntity{
         this.name = name;
     }
 
-    public Faculty getFaculty() {
-        return faculty;
-    }
-
-    public void setFaculty(Faculty faculty) {
-        this.faculty = faculty;
-    }
-
     public String getFullName() {
         return fullName;
     }
@@ -70,20 +66,20 @@ public class Department extends UUIDEntity{
         this.fullName = fullName;
     }
 
-    public Long getId() {
-        return id;
+    public Direction getDirection() {
+        return direction;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 
-    public List<Teacher> getTeachers() {
-        return teachers;
+    public List<Group> getGroups() {
+        return groups;
     }
 
-    public void setTeachers(List<Teacher> teachers) {
-        this.teachers = teachers;
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
     }
 
     public Long getApiId() {
@@ -93,6 +89,4 @@ public class Department extends UUIDEntity{
     public void setApiId(Long apiId) {
         this.apiId = apiId;
     }
-
-
 }
